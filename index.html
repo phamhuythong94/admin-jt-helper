@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J&T Mỹ Tho - Trợ Lý Admin</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root { --jt-red: #e62117; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; }
+        h2 { color: var(--jt-red); margin-bottom: 5px; }
+        .status-tag { font-size: 12px; color: #666; margin-bottom: 20px; display: block; }
+        
+        #login-box { padding: 20px 0; }
+        #tool-box { display: none; } /* Ẩn tool khi chưa đăng nhập */
+        
+        textarea { width: 100%; height: 120px; border: 2px solid #eee; border-radius: 10px; padding: 10px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px; }
+        textarea:focus { border-color: var(--jt-red); outline: none; }
+        
+        button { background: var(--jt-red); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #c41a12; }
+
+        .user-info { background: #fff3f3; color: var(--jt-red); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #f1f1f1; padding: 10px; font-size: 13px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; }
+        .shipper { color: var(--jt-red); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>J&T EXPRESS MỸ THO</h2>
+    <span class="status-tag">Hệ thống phân tuyến Admin v1.0</span>
+
+    <div id="login-box">
+        <p>Vui lòng đăng nhập Google để bắt đầu dùng thử 7 ngày</p>
+        <div id="g_id_onload"
+             data-client_id="855018698188-gttg1r7f54p5f3itcl4rrd0c2oekn6.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+    </div>
+
+    <div id="tool-box">
+        <div class="user-info" id="user-display">Đang kiểm tra tài khoản...</div>
+        <textarea id="input-codes" placeholder="Dán danh sách mã vận đơn vào đây..."></textarea>
+        <button onclick="processCodes()">PHÂN TUYẾN NGAY 🚀</button>
+        <div id="result-table"></div>
+    </div>
+</div>
+
+<script>
+    // LINK CỦA NÍ ĐÃ DÁN VÀO ĐÂY
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhoo2vTi11uCBrf1Yj_gr4gJ9pUHZnoByi92fEGFi6GlQQFGIL52SFC2xTQA4ZMYlgMQ/exec";
+    let DANH_MUC_SHIPPER = {};
+
+    // 1. Xử lý khi đăng nhập xong
+    function handleCredentialResponse(response) {
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        const email = payload.email;
+
+        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('tool-box').style.display = 'block';
+
+        // Check bản quyền từ Google Sheet của ní
+        fetch(`${SCRIPT_URL}?action=checkAuth&email=${email}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "success") {
+                    document.getElementById('user-display').innerText = `Hạn dùng: ${new Date(data.expiry).toLocaleDateString('vi-VN')}`;
+                    loadShipperData();
+                } else {
+                    alert("Tài khoản hết hạn! Liên hệ ní Thông để gia hạn.");
+                    location.reload();
+                }
+            });
+    }
+
+    // 2. Lấy danh sách shipper từ Sheet TRANG1
+    function loadShipperData() {
+        fetch(`${SCRIPT_URL}?action=getDanhMuc`)
+            .then(res => res.json())
+            .then(data => {
+                DANH_MUC_SHIPPER = data;
+                console.log("Đã tải dữ liệu shipper!");
+            });
+    }
+
+    // 3. Logic xử lý mã vận đơn
+    function processCodes() {
+        const input = document.getElementById('input-codes').value;
+        const codes = input.split(/[\n, ]+/).filter(c => c.trim().length > 5);
+        
+        if (Object.keys(DANH_MUC_SHIPPER).length === 0) {
+            alert("Đang tải dữ liệu từ Sheet, ní đợi 2 giây rồi bấm lại nha!");
+            return;
+        }
+
+        let html = `<table><tr><th>Mã đơn</th><th>Khu vực</th><th>Shipper</th></tr>`;
+        
+        codes.forEach(code => {
+            let d3 = code.trim().slice(-3); // Lấy 3 số cuối làm mã đoạn 3
+            let info = DANH_MUC_SHIPPER[d3] || { khu: "Mã lạ", ten: "Chưa rõ" };
+            html += `<tr>
+                <td>...${code.slice(-6)}</td>
+                <td>${info.khu}</td>
+                <td class="shipper">${info.ten}</td>
+            </tr>`;
+        });
+        
+        html += `</table>`;
+        document.getElementById('result-table').innerHTML = html;
+    }
+</script>
+
+</body>
+</html>
