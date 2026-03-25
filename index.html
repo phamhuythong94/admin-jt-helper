@@ -184,7 +184,8 @@
 </div>
 
 <script>
-    const AUTH_URL = "https://script.google.com/macros/s/AKfycbwukwW0tEYoW3j9RTKnkRXnOdNwkA9Yi6RdpdEBE7IjAbzOtswd-dVP1lGJaRNOXIwA/exec";
+    // LINK MỚI CỦA NÍ ĐÃ CẬP NHẬT TẠI ĐÂY
+    const AUTH_URL = "https://script.google.com/macros/s/AKfycbzeUhH2WjJm3gv2RYghiI1u864W70rCP2kouA5pTjcRC3Wa4jd_ghMS_dH0Bb0Ynh-3/exec";
     let DB = {};
 
     function showPage(id, el) {
@@ -199,11 +200,15 @@
         const p = JSON.parse(atob(r.credential.split('.')[1]));
         fetch(`${AUTH_URL}?action=checkAuth&email=${p.email}`).then(res => res.json()).then(d => {
             if(d.status === "success") {
-                renderUserProfile(p.email, d.type || 'Standard', d.daysLeft || 7);
+                // Sử dụng daysLeft từ API trả về, mặc định 0 nếu lỗi
+                renderUserProfile(p.email, d.type || 'Standard', d.daysLeft !== undefined ? d.daysLeft : 0);
                 document.getElementById('app-body').style.display = 'block';
             } else { 
                 alert("Tài khoản chưa được kích hoạt hoặc hết hạn!"); 
             }
+        }).catch(err => {
+            console.error("Lỗi kết nối API:", err);
+            alert("Không thể kết nối với hệ thống quản lý tài khoản!");
         });
     }
 
