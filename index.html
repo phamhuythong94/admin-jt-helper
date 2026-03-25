@@ -3,95 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&T LOGISTICS ENTERPRISE 2025</title>
+    <title>J&T EXPRESS - PRO LOGISTICS TOOL 2026</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        :root { --jt-red: #e62117; --bg: #f8fafc; --text: #1e293b; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { background: white; width: 100%; max-width: 850px; padding: 30px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); text-align: center; }
+        :root { --jt-red: #e62117; --jt-dark: #1e293b; --bg: #f8fafc; --text: #1e293b; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
         
-        /* Header & User */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .logo h1 { color: var(--jt-red); margin: 0; font-size: 28px; font-weight: 900; letter-spacing: -1px; }
-        .user-pill { background: #1e293b; color: white; padding: 8px 15px; border-radius: 50px; font-size: 12px; display: flex; align-items: center; gap: 8px; }
+        .container { background: white; width: 100%; max-width: 900px; padding: 35px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); position: relative; }
+        
+        /* Header & Tabs */
+        .header-main { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .logo-area h1 { color: var(--jt-red); margin: 0; font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+        
+        .tab-container { display: flex; gap: 8px; background: #f1f5f9; padding: 5px; border-radius: 14px; margin-bottom: 30px; }
+        .tab-item { flex: 1; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 13px; text-align: center; transition: 0.3s; color: #64748b; }
+        .tab-item.active { background: white; color: var(--jt-red); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-        /* Upload Cards */
-        .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
-        .card { border: 2px dashed #e2e8f0; padding: 25px; border-radius: 20px; cursor: pointer; background: #fff; transition: 0.3s; }
-        .card:hover { border-color: var(--jt-red); background: #fef2f2; }
-        .card.active { border-color: #22c55e; background: #f0fdf4; border-style: solid; }
-        .card b { display: block; margin-bottom: 5px; font-size: 14px; }
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Barcode Table */
-        .table-wrap { background: white; border-radius: 16px; overflow: hidden; border: 1px solid #f1f5f9; margin-top: 20px; }
+        /* Dashboard Cards */
+        .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .u-card { border: 2px dashed #e2e8f0; padding: 30px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; background: #fff; text-align: center; }
+        .u-card:hover { border-color: var(--jt-red); background: #fef2f2; transform: translateY(-3px); }
+        .u-card.done { border-color: #22c55e; background: #f0fdf4; border-style: solid; }
+        .u-card i { font-size: 24px; display: block; margin-bottom: 10px; }
+        .u-card b { font-size: 14px; color: #334155; }
+
+        /* Kiểm Kho Area */
+        .bulk-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 20px; padding: 25px; }
+        .bulk-area { width: 100%; height: 150px; padding: 20px; border-radius: 15px; border: 1px solid #cbd5e1; font-family: 'Courier New', monospace; font-size: 15px; outline: none; transition: 0.3s; margin-top: 15px; box-sizing: border-box; }
+        .bulk-area:focus { border-color: var(--jt-red); box-shadow: 0 0 0 4px rgba(230, 33, 23, 0.1); }
+
+        /* Barcode Result List */
+        .barcode-list { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 30px; }
+        .barcode-card { background: white; border: 1px solid #f1f5f9; padding: 15px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        .barcode-card svg { height: 70px; width: 250px; }
+        .info-tag { text-align: right; border-left: 2px solid #f1f5f9; padding-left: 20px; }
+        .info-tag b { font-size: 20px; color: var(--jt-red); display: block; }
+        .info-tag small { color: #94a3b8; font-weight: 600; }
+
+        /* Stats & Table */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: #f8fafc; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; }
+        .stat-card b { font-size: 11px; color: #64748b; text-transform: uppercase; }
+        .stat-card .val { font-size: 20px; font-weight: 800; color: var(--jt-red); display: block; }
+
+        .table-container { background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid #f1f5f9; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { background: #f8fafc; padding: 12px 20px; font-size: 11px; color: #64748b; text-transform: uppercase; }
-        td { padding: 12px 20px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
-        .barcode-svg { width: 120px; height: 40px; }
-        .shipper-tag { background: #fee2e2; color: var(--jt-red); padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 13px; }
+        th { background: #f8fafc; padding: 15px 20px; font-size: 11px; color: #64748b; text-transform: uppercase; }
+        td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
 
-        /* Stats & Search */
-        .controls { display: flex; gap: 10px; margin: 20px 0; }
-        .search-box { flex: 1; padding: 12px 20px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none; }
-        .btn { padding: 12px 20px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-red { background: var(--jt-red); color: white; }
+        .btn-print { background: var(--jt-dark); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-print:hover { opacity: 0.9; }
 
-        /* Footer & QR */
-        .footer { margin-top: 40px; border-top: 1px solid #eee; padding-top: 25px; }
-        .qr-box { background: #f8fafc; padding: 20px; border-radius: 20px; display: inline-flex; align-items: center; gap: 20px; margin-top: 10px; }
-        
-        /* In nhãn kiểm kho */
-        @media print {
-            .card, .header, .controls, .footer, .instruction, #login-section { display: none !important; }
-            .container { box-shadow: none; padding: 0; max-width: 100%; }
-            .barcode-svg { width: 200px !important; height: 80px !important; }
-            td { padding: 20px; border: 1px solid #eee; }
-        }
+        .footer { margin-top: 40px; border-top: 1px solid #f1f5f9; padding-top: 25px; text-align: center; }
+        .qr-card { background: #f8fafc; padding: 20px; border-radius: 20px; display: inline-flex; align-items: center; gap: 20px; margin-top: 15px; }
+
+        @media print { .tab-container, .upload-grid, .bulk-area, .btn-print, .footer, #login-section { display: none !important; } .container { box-shadow: none; border: none; padding: 0; width: 100%; max-width: 100%; } .barcode-card { border: 1px solid #eee; margin-bottom: 10px; page-break-inside: avoid; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <div class="logo"><h1>J&T EXPRESS <span>PRO</span></h1></div>
-        <div id="user-area" style="display:none;"><div class="user-pill"><span id="u-mail">...</span></div></div>
+    <div class="header-main">
+        <div class="logo-area"><h1>J&T <span style="font-size:12px; background:var(--jt-red); color:white; padding:3px 8px; border-radius:6px; vertical-align:middle;">PRO</span></h1></div>
+        <div id="user-pill-area" style="display:none;"><div style="background:#1e293b; color:white; padding:8px 15px; border-radius:50px; font-size:11px; font-weight:700;"><span id="u-mail">...</span></div></div>
     </div>
 
-    <div id="login-section" style="padding: 50px 0;">
-        <center><div id="g_id_onload" data-client_id="850864834737-40v7posjfcq42avv71jv6f38u5tip2fq.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div><div class="g_id_signin" data-type="standard"></div></center>
+    <div id="login-section" style="padding: 80px 0; text-align:center;">
+        <p style="font-weight:600; color:#64748b; margin-bottom:20px;">Hệ thống yêu cầu đăng nhập Admin</p>
+        <center><div id="g_id_onload" data-client_id="850864834737-40v7posjfcq42avv71jv6f38u5tip2fq.apps.googleusercontent.com" data-callback="handleAuth"></div><div class="g_id_signin" data-type="standard" data-shape="pill"></div></center>
     </div>
 
-    <div id="tool-section" style="display:none;">
-        <div class="upload-grid">
-            <div class="card" id="c-dm" onclick="document.getElementById('i-dm').click()">
-                <b>1. DANH MỤC KIỂM KHO 📂</b>
-                <small id="t-dm">Nạp Excel: Mã-Khu-Tên</small>
-                <input type="file" id="i-dm" hidden onchange="loadDM(event)">
-            </div>
-            <div class="card" id="c-data" onclick="document.getElementById('i-data').click()">
-                <b>2. FILE JMS ĐƠN HÀNG 📄</b>
-                <small id="t-data">Nạp Excel xuất từ hệ thống</small>
-                <input type="file" id="i-data" hidden onchange="loadJMS(event)">
-            </div>
+    <div id="main-content" style="display:none;">
+        <div class="tab-container">
+            <div class="tab-item active" onclick="switchTab('tab-pt', this)">📦 PHÂN TUYẾN</div>
+            <div class="tab-item" onclick="switchTab('tab-kk', this)">🔍 KIỂM KHO (DÁN MÃ)</div>
         </div>
 
-        <div class="controls" id="ctrl" style="display:none;">
-            <input type="text" class="search-box" id="search" placeholder="🔍 Quét mã hoặc tìm shipper..." onkeyup="filter()">
-            <button class="btn btn-red" onclick="window.print()">🖨️ IN NHÃN KIỂM KHO</button>
+        <div id="tab-pt" class="page active">
+            <div class="upload-grid">
+                <div class="u-card" id="card-dm" onclick="document.getElementById('in-dm').click()">
+                    <i>📂</i><b>DANH MỤC SHIPPER</b><br><small id="txt-dm">Nạp Excel: Mã-Khu-Tên</small>
+                    <input type="file" id="in-dm" hidden onchange="loadDM(event)">
+                </div>
+                <div class="u-card" id="card-data" onclick="document.getElementById('in-data').click()">
+                    <i>📄</i><b>FILE ĐƠN HÀNG (JMS)</b><br><small id="txt-data">Phân tuyến tự động</small>
+                    <input type="file" id="in-data" hidden onchange="loadJMS(event)">
+                </div>
+            </div>
+            <div id="stats-area" class="stats-grid"></div>
+            <div class="table-container" id="pt-result"></div>
         </div>
 
-        <div class="table-wrap"><div id="res"></div></div>
+        <div id="tab-kk" class="page">
+            <div class="bulk-box">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="margin:0; font-size:18px;">Tạo Mã Vạch Hàng Loạt</h3>
+                    <button class="btn-print" onclick="window.print()">🖨️ IN TEM MÃ VẠCH</button>
+                </div>
+                <textarea class="bulk-area" id="bulk-input" placeholder="Dán danh sách mã vào đây (Mỗi mã một dòng)..." oninput="genBulk()"></textarea>
+                <p id="bulk-info" style="font-size:12px; font-weight:700; color:var(--jt-red); margin-top:10px;">0 mã được phát hiện</p>
+            </div>
+            <div id="bulk-res" class="barcode-list"></div>
+        </div>
     </div>
 
     <div class="footer">
-        <div class="qr-box">
-            <img src="qr.png" style="width:120px; border-radius:10px;">
+        <p style="font-size:12px; color:#94a3b8;">Hệ thống Logistics J&T © 2026 | phamhuythong94@gmail.com</p>
+        <div class="qr-card">
+            <img src="qr.png" style="width:110px; border-radius:12px; border:3px solid white; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
             <div style="text-align:left;">
-                <b style="color:var(--jt-red);">GIA HẠN SAAS 2025</b>
-                <p style="margin:5px 0; font-size:12px;">Nội dung CK: <span style="background:#ff0; font-weight:bold;">Tên Email của bạn</span></p>
-                <small style="color:#888;">Hệ thống tự động kích hoạt sau khi nhận tiền.</small>
+                <b style="color:var(--jt-red); font-size:14px;">GIA HẠN DỊCH VỤ</b><br>
+                <p style="margin:5px 0; font-size:12px;">Nội dung: <mark style="background:#ffeb3b; padding:2px 5px; font-weight:700;">Email của bạn</mark></p>
+                <small style="color:#94a3b8;">Kích hoạt tự động sau khi nhận tiền.</small>
             </div>
         </div>
     </div>
@@ -101,71 +130,80 @@
     const AUTH_URL = "https://script.google.com/macros/s/AKfycbwukwW0tEYoW3j9RTKnkRXnOdNwkA9Yi6RdpdEBE7IjAbzOtswd-dVP1lGJaRNOXIwA/exec";
     let DB = {}; let LIST = [];
 
-    function handleCredentialResponse(r) {
+    function switchTab(id, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
+    }
+
+    function handleAuth(r) {
         const p = JSON.parse(atob(r.credential.split('.')[1]));
         fetch(`${AUTH_URL}?action=checkAuth&email=${p.email}`).then(res => res.json()).then(d => {
             if(d.status === "success") {
                 document.getElementById('login-section').style.display = 'none';
-                document.getElementById('tool-section').style.display = 'block';
-                document.getElementById('user-area').style.display = 'block';
+                document.getElementById('main-content').style.display = 'block';
+                document.getElementById('user-pill-area').style.display = 'block';
                 document.getElementById('u-mail').innerText = p.email;
-            } else { alert("Hết hạn dùng!"); }
+            } else { alert("Hết hạn!"); }
         });
     }
 
     function loadDM(e) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type: 'array'}).SheetNames[0]], {header: 1});
+            const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type:'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type:'array'}).SheetNames[0]], {header:1});
             DB = {};
-            data.slice(1).forEach(r => { if(r[0]) DB[r[0].toString().trim()] = { k: r[1], t: r[2] }; });
-            document.getElementById('c-dm').classList.add('active');
-            document.getElementById('t-dm').innerText = "✅ Đã nạp " + Object.keys(DB).length + " bưu cục";
+            data.slice(1).forEach(r => { if(r[0]) DB[r[0].toString().trim()] = {k:r[1], t:r[2]}; });
+            document.getElementById('card-dm').classList.add('done');
+            document.getElementById('txt-dm').innerText = "✅ " + Object.keys(DB).length + " bưu cục";
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
 
     function loadJMS(e) {
-        if(Object.keys(DB).length === 0) { alert("Nạp file danh mục trước ní ơi!"); return; }
         const reader = new FileReader();
         reader.onload = function(e) {
-            const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type: 'array'}).SheetNames[0]], {header: 1});
-            LIST = [];
+            const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type:'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type:'array'}).SheetNames[0]], {header:1});
+            let h = `<table><thead><tr><th>Mã Đơn</th><th>Khu</th><th>Shipper</th></tr></thead><tbody>`;
+            let st = {}; let total = 0;
             data.slice(1).forEach(row => {
                 let code = row.find(c => c && c.toString().length >= 10);
                 if(code) {
-                    let d3 = code.toString().slice(-3);
-                    let info = DB[d3] || { k: "Lạ", t: "Chưa rõ" };
-                    LIST.push({ code: code.toString(), khu: info.k, ten: info.t });
+                    let info = DB[code.toString().slice(-3)] || {k:"?", t:"Lạ"};
+                    h += `<tr><td>...${code.toString().slice(-6)}</td><td>${info.k}</td><td style="font-weight:700;color:var(--jt-red)">${info.t}</td></tr>`;
+                    st[info.t] = (st[info.t] || 0) + 1; total++;
                 }
             });
-            render(LIST);
-            document.getElementById('ctrl').style.display = 'flex';
-            document.getElementById('c-data').classList.add('active');
+            document.getElementById('pt-result').innerHTML = h + "</tbody></table>";
+            renderStats(st);
+            document.getElementById('card-data').classList.add('done');
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
 
-    function render(data) {
-        let h = `<table><thead><tr><th>Mã Vạch Kiểm Kho</th><th>Thông tin đơn</th><th>Shipper</th></tr></thead><tbody>`;
-        data.forEach((item, idx) => {
-            h += `<tr>
-                <td><svg id="barcode-${idx}"></svg></td>
-                <td><small style="color:#888">Mã:</small> <b>...${item.code.slice(-6)}</b><br><small>Khu:</small> ${item.khu}</td>
-                <td><span class="shipper-tag">${item.ten}</span></td>
-            </tr>`;
-        });
-        document.getElementById('res').innerHTML = h + "</tbody></table>";
-        // Vẽ mã vạch sau khi tạo bảng
-        data.forEach((item, idx) => {
-            JsBarcode(`#barcode-${idx}`, item.code, { format: "CODE128", width: 1.5, height: 40, displayValue: false, margin: 0 });
-        });
+    function renderStats(st) {
+        let h = "";
+        for(let s in st) h += `<div class="stat-card"><b>${s}</b><span class="val">${st[s]} đơn</span></div>`;
+        document.getElementById('stats-area').innerHTML = h;
     }
 
-    function filter() {
-        let v = document.getElementById('search').value.toLowerCase();
-        let f = LIST.filter(i => i.code.includes(v) || i.ten.toLowerCase().includes(v) || i.khu.toLowerCase().includes(v));
-        render(f);
+    // LOGIC DÁN MÃ HÀNG LOẠT (KIỂM KHO)
+    function genBulk() {
+        const val = document.getElementById('bulk-input').value;
+        const codes = val.split(/\n/).map(c => c.trim()).filter(c => c.length >= 10);
+        const res = document.getElementById('bulk-res');
+        res.innerHTML = "";
+        document.getElementById('bulk-info').innerText = codes.length + " mã vận đơn hợp lệ";
+
+        codes.forEach((code, idx) => {
+            let info = DB[code.slice(-3)] || {k:"Chưa rõ", t:"Mã lạ"};
+            let card = document.createElement('div');
+            card.className = 'barcode-card';
+            card.innerHTML = `<svg id="b-svg-${idx}"></svg><div class="info-tag"><b>${info.t}</b><small>${info.k}</small><br><code style="font-size:11px;">${code}</code></div>`;
+            res.appendChild(card);
+            JsBarcode(`#b-svg-${idx}`, code, {format:"CODE128", width:2, height:60, displayValue:false, margin:0});
+        });
     }
 </script>
 </body>
