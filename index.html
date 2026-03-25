@@ -80,6 +80,12 @@
         .renew-note { font-size: 13px; color: #94a3b8; line-height: 1.6; }
         .renew-note b { color: #facc15; }
 
+        /* COPYRIGHT SECTION */
+        .copyright-area { border-top: 1px solid #e2e8f0; margin-top: 50px; padding-top: 30px; color: #94a3b8; font-size: 12px; }
+        .contact-pill { display: inline-flex; align-items: center; gap: 15px; background: #fff; padding: 8px 20px; border-radius: 50px; border: 1px solid #e2e8f0; margin-top: 15px; }
+        .contact-pill span { color: #475569; font-weight: 700; }
+        .contact-pill i { color: var(--jt-red); font-style: normal; font-weight: 900; }
+
         .page { display: none; }
         .page.active { display: block; animation: zoomIn 0.3s ease-out; }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
@@ -159,11 +165,21 @@
                 <p class="renew-note">
                     Chuyển khoản ghi nội dung: <b>Email của bạn</b><br>
                     Hệ thống sẽ tự động kích hoạt ngay sau khi nhận được.<br>
-                    <span style="opacity:0.6; font-size:11px;">Hỗ trợ Admin: phamhuythong94@gmail.com 0389899388 zalo </span>
+                    <span style="opacity:0.7; font-size:11px;">Tư vấn nâng cấp: <b>038.989.9388</b></span>
                 </p>
             </div>
         </div>
-        <p style="margin-top:40px; color:#cbd5e1; font-size:11px; letter-spacing:1px;">J&T LOGISTICS AUTOMATION SYSTEM v4.0</p>
+
+        <div class="copyright-area">
+            <div style="font-weight: 800; letter-spacing: 2px; margin-bottom: 5px;">J&T LOGISTICS AUTOMATION SYSTEM v4.1</div>
+            <div>© 2026 Bản quyền thuộc về <b>Phạm Huy Thông</b>. Mọi hành vi sao chép đều bị nghiêm cấm.</div>
+            
+            <div class="contact-pill">
+                <span>📧 Email: <i>phamhuythong94@gmail.com</i></span>
+                <span style="color:#e2e8f0">|</span>
+                <span>💬 Zalo: <i>0389.899.388</i></span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -182,7 +198,6 @@
     function handleAuth(r) {
         const p = JSON.parse(atob(r.credential.split('.')[1]));
         fetch(`${AUTH_URL}?action=checkAuth&email=${p.email}`).then(res => res.json()).then(d => {
-            // d.status: "success", d.daysLeft: số ngày còn lại (ví dụ 7), d.type: "Standard" hoặc "Premium"
             if(d.status === "success") {
                 renderUserProfile(p.email, d.type || 'Standard', d.daysLeft || 7);
                 document.getElementById('app-body').style.display = 'block';
