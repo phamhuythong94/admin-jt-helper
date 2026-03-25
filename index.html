@@ -3,115 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&T Mỹ Tho - Trợ Lý Admin</title>
+    <title>J&T Mỹ Tho - Hệ Thống Phân Tuyến Admin</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        :root { --jt-red: #e62117; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; }
-        h2 { color: var(--jt-red); margin-bottom: 5px; }
-        .status-tag { font-size: 12px; color: #666; margin-bottom: 20px; display: block; }
+        :root { --jt-red: #e62117; --bg-gray: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-gray); margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { background: white; width: 100%; max-width: 600px; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .logo-area { margin-bottom: 20px; }
+        h2 { color: var(--jt-red); margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px; }
+        .sub-title { color: #666; font-size: 14px; margin-bottom: 30px; display: block; }
         
-        #login-box { padding: 20px 0; }
-        #tool-box { display: none; } /* Ẩn tool khi chưa đăng nhập */
-        
-        textarea { width: 100%; height: 120px; border: 2px solid #eee; border-radius: 10px; padding: 10px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px; }
-        textarea:focus { border-color: var(--jt-red); outline: none; }
-        
-        button { background: var(--jt-red); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #c41a12; }
+        /* Login Section */
+        #login-section { padding: 40px 0; border: 1px dashed #ddd; border-radius: 10px; background: #fff; }
+        .login-hint { font-size: 14px; color: #888; margin-bottom: 20px; }
 
-        .user-info { background: #fff3f3; color: var(--jt-red); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { background: #f1f1f1; padding: 10px; font-size: 13px; text-align: left; }
-        td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; }
-        .shipper { color: var(--jt-red); font-weight: bold; }
+        /* Tool Section */
+        #tool-section { display: none; }
+        .user-badge { background: #fff3f3; color: var(--jt-red); padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; margin-bottom: 20px; border: 1px solid #ffcccc; }
+        
+        textarea { width: 100%; height: 150px; border: 2px solid #eee; border-radius: 12px; padding: 15px; font-size: 16px; box-sizing: border-box; transition: 0.3s; margin-bottom: 15px; resize: none; }
+        textarea:focus { border-color: var(--jt-red); outline: none; box-shadow: 0 0 8px rgba(230, 33, 23, 0.2); }
+        
+        .btn-main { background: var(--jt-red); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(230, 33, 23, 0.3); }
+        .btn-main:hover { background: #c41a12; transform: translateY(-2px); }
+
+        /* Result Table */
+        .result-container { margin-top: 25px; text-align: left; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; }
+        th { background: #f8f9fa; color: #666; font-size: 13px; text-transform: uppercase; padding: 12px; text-align: left; border-bottom: 2px solid #eee; }
+        td { padding: 12px; border-bottom: 1px solid #f1f1f1; font-size: 15px; }
+        .shipper-tag { color: var(--jt-red); font-weight: bold; display: flex; align-items: center; }
+        .shipper-tag::before { content: '👤'; margin-right: 5px; font-size: 12px; }
+        .code-tag { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #333; }
+        .loading { display: none; margin-top: 10px; font-style: italic; color: #888; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>J&T EXPRESS MỸ THO</h2>
-    <span class="status-tag">Hệ thống phân tuyến Admin v1.0</span>
-
-    <div id="login-box">
-        <p>Vui lòng đăng nhập Google để bắt đầu dùng thử 7 ngày</p>
-        <div id="g_id_onload"
-             data-client_id="855018698188-gttg1r7f54p5f3itcl4rrd0c2oekn6.apps.googleusercontent.com"
-             data-callback="handleCredentialResponse">
-        </div>
-        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+<div class="container">
+    <div class="logo-area">
+        <h2>J&T EXPRESS MỸ THO</h2>
+        <span class="sub-title">Trợ Lý Phân Tuyến Admin (Phiên bản SaaS)</span>
     </div>
 
-    <div id="tool-box">
-        <div class="user-info" id="user-display">Đang kiểm tra tài khoản...</div>
-        <textarea id="input-codes" placeholder="Dán danh sách mã vận đơn vào đây..."></textarea>
-        <button onclick="processCodes()">PHÂN TUYẾN NGAY 🚀</button>
-        <div id="result-table"></div>
+    <div id="login-section">
+        <p class="login-hint">Vui lòng đăng nhập Google để kích hoạt dùng thử 7 ngày</p>
+        <center>
+            <div id="g_id_onload"
+                 data-client_id="809942326574-1tg04gt5qneislkh95cs1jlbc1s4nu84.apps.googleusercontent.com"
+                 data-callback="handleCredentialResponse">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
+        </center>
+    </div>
+
+    <div id="tool-section">
+        <div class="user-badge" id="user-info">Đang kiểm tra bản quyền...</div>
+        
+        <textarea id="input-data" placeholder="Dán danh sách mã vận đơn từ JMS vào đây..."></textarea>
+        
+        <button class="btn-main" onclick="processData()">BẮT ĐẦU PHÂN TUYẾN 🚀</button>
+        <div id="loading-text" class="loading">Đang đối soát dữ liệu từ Google Sheets...</div>
+
+        <div class="result-container" id="output-area"></div>
     </div>
 </div>
 
 <script>
-    // LINK CỦA NÍ ĐÃ DÁN VÀO ĐÂY
+    // THÔNG TIN KẾT NỐI CỦA NÍ
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhoo2vTi11uCBrf1Yj_gr4gJ9pUHZnoByi92fEGFi6GlQQFGIL52SFC2xTQA4ZMYlgMQ/exec";
-    let DANH_MUC_SHIPPER = {};
+    let SHIPPER_DATABASE = {};
 
-    // 1. Xử lý khi đăng nhập xong
+    // 1. Xử lý sau khi người dùng chọn tài khoản Google
     function handleCredentialResponse(response) {
         const payload = JSON.parse(atob(response.credential.split('.')[1]));
         const email = payload.email;
 
-        document.getElementById('login-box').style.display = 'none';
-        document.getElementById('tool-box').style.display = 'block';
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('tool-section').style.display = 'block';
 
-        // Check bản quyền từ Google Sheet của ní
+        // Gọi về Google Sheet để kiểm tra Email/Hạn dùng
         fetch(`${SCRIPT_URL}?action=checkAuth&email=${email}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status === "success") {
-                    document.getElementById('user-display').innerText = `Hạn dùng: ${new Date(data.expiry).toLocaleDateString('vi-VN')}`;
-                    loadShipperData();
+                    const expiry = new Date(data.expiry).toLocaleDateString('vi-VN');
+                    document.getElementById('user-info').innerText = `👤 ${email} | Hạn dùng: ${expiry}`;
+                    syncShipperData(); // Tải danh mục shipper về máy
                 } else {
-                    alert("Tài khoản hết hạn! Liên hệ ní Thông để gia hạn.");
+                    alert("Tài khoản của ní đã hết hạn! Vui lòng liên hệ Admin để gia hạn.");
                     location.reload();
                 }
-            });
+            })
+            .catch(err => alert("Lỗi kết nối Server: " + err));
     }
 
-    // 2. Lấy danh sách shipper từ Sheet TRANG1
-    function loadShipperData() {
+    // 2. Lấy danh sách TRANG1 từ Google Sheet
+    function syncShipperData() {
+        document.getElementById('loading-text').style.display = 'block';
         fetch(`${SCRIPT_URL}?action=getDanhMuc`)
             .then(res => res.json())
             .then(data => {
-                DANH_MUC_SHIPPER = data;
-                console.log("Đã tải dữ liệu shipper!");
+                SHIPPER_DATABASE = data;
+                document.getElementById('loading-text').style.display = 'none';
+                console.log("Database synced!");
             });
     }
 
-    // 3. Logic xử lý mã vận đơn
-    function processCodes() {
-        const input = document.getElementById('input-codes').value;
-        const codes = input.split(/[\n, ]+/).filter(c => c.trim().length > 5);
-        
-        if (Object.keys(DANH_MUC_SHIPPER).length === 0) {
-            alert("Đang tải dữ liệu từ Sheet, ní đợi 2 giây rồi bấm lại nha!");
+    // 3. Xử lý chuỗi mã vận đơn người dùng dán vào
+    function processData() {
+        const rawText = document.getElementById('input-data').value;
+        if (!rawText.trim()) {
+            alert("Ní chưa dán mã đơn mà!");
             return;
         }
 
-        let html = `<table><tr><th>Mã đơn</th><th>Khu vực</th><th>Shipper</th></tr>`;
+        // Tách các mã đơn (lọc theo xuống dòng, dấu phẩy hoặc khoảng trắng)
+        const codes = rawText.split(/[\n, ]+/).filter(c => c.trim().length > 5);
         
+        if (Object.keys(SHIPPER_DATABASE).length === 0) {
+            alert("Dữ liệu đang tải, ní đợi xíu rồi bấm lại nha!");
+            return;
+        }
+
+        let html = `<table>
+            <thead>
+                <tr>
+                    <th>Mã Đơn (6 số cuối)</th>
+                    <th>Khu Vực</th>
+                    <th>Shipper</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
         codes.forEach(code => {
-            let d3 = code.trim().slice(-3); // Lấy 3 số cuối làm mã đoạn 3
-            let info = DANH_MUC_SHIPPER[d3] || { khu: "Mã lạ", ten: "Chưa rõ" };
+            const cleanCode = code.trim();
+            const d3 = cleanCode.slice(-3); // Lấy mã đoạn 3 từ 3 số cuối
+            const info = SHIPPER_DATABASE[d3] || { khu: "⚠️ Mã lạ", ten: "Chưa phân" };
+
             html += `<tr>
-                <td>...${code.slice(-6)}</td>
+                <td class="code-tag">...${cleanCode.slice(-6)}</td>
                 <td>${info.khu}</td>
-                <td class="shipper">${info.ten}</td>
+                <td class="shipper-tag">${info.ten}</td>
             </tr>`;
         });
+
+        html += `</tbody></table>`;
+        document.getElementById('output-area').innerHTML = html;
         
-        html += `</table>`;
-        document.getElementById('result-table').innerHTML = html;
+        // Cuộn xuống kết quả cho vợ ní dễ nhìn
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
 
