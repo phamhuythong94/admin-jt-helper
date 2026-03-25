@@ -10,47 +10,41 @@
     <style>
         :root { --jt-red: #e62117; --jt-dark: #1e293b; --bg: #f8fafc; --success: #22c55e; }
         body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--jt-dark); margin: 0; padding: 0; }
-        
+       
         header { background: white; height: 95px; display: flex; align-items: center; justify-content: space-between; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #edf2f7; }
         .logo { font-size: 28px; font-weight: 900; color: var(--jt-red); letter-spacing: -1.5px; }
         .nav-tabs { display: flex; background: #f1f5f9; padding: 6px; border-radius: 16px; gap: 5px; }
         .tab { padding: 12px 28px; cursor: pointer; border-radius: 12px; font-weight: 800; font-size: 13px; color: #64748b; transition: 0.3s; }
         .tab.active { background: white; color: var(--jt-red); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        
+       
         .container { max-width: 1350px; margin: 40px auto; padding: 0 20px; }
         .card-pro { background: white; border-radius: 30px; padding: 45px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,1); margin-bottom: 30px; }
-        
+       
         .grid-upload { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 35px 0; }
         .upload-item { background: #ffffff; border: 2.5px dashed #e2e8f0; padding: 40px 20px; border-radius: 24px; text-align: center; cursor: pointer; transition: 0.4s; }
         .upload-item:hover { border-color: var(--jt-red); background: #fffafa; transform: translateY(-8px); }
         .upload-item.done { border-color: var(--success); background: #f0fdf4; border-style: solid; }
-        
+       
         table { width: 100%; border-collapse: collapse; background: white; border-radius: 20px; overflow: hidden; margin-top: 20px; table-layout: fixed; }
         th { background: #f8fafc; padding: 18px; text-align: left; font-size: 12px; color: #64748b; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; cursor: pointer; }
         th:hover { color: var(--jt-red); }
         td { padding: 15px 18px; border-bottom: 1px solid #f8fafc; font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
         .btn-copy { background: #f1f5f9; border: 1px solid #e2e8f0; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: 800; margin-left: 8px; color: #64748b; transition: 0.2s; text-transform: uppercase; }
         .btn-copy:hover { border-color: var(--jt-red); color: var(--jt-red); }
         .btn-copy.copied { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
-
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
         .stats-item { background: #f8fafc; padding: 15px; border-radius: 15px; border: 1px solid #edf2f7; }
         .stats-name { font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; }
         .stats-count { font-size: 20px; font-weight: 900; color: var(--jt-red); }
-
         .barcode-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; }
         .barcode-card { background: white; border: 1px solid #f1f5f9; padding: 15px; border-radius: 15px; display: flex; flex-direction: column; align-items: center; }
         .bulk-textarea { width: 100%; height: 120px; border-radius: 15px; padding: 15px; border: 2px solid #f1f5f9; font-family: monospace; box-sizing: border-box; }
-
         .premium-footer { margin-top: 80px; padding-bottom: 30px; text-align: center; }
         .renew-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); display: inline-flex; align-items: center; gap: 35px; padding: 35px 50px; border-radius: 35px; color: white; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
         .qr-box { background: white; padding: 10px; border-radius: 15px; }
         .qr-box img { width: 110px; height: 110px; display: block; }
-
         .disclaimer-container { max-width: 900px; margin: 40px auto; padding: 25px; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 11px; text-align: justify; line-height: 1.6; }
         .disclaimer-container b { color: #64748b; }
-
         .page { display: none; }
         .page.active { display: block; animation: zoomIn 0.3s ease-out; }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
@@ -58,12 +52,11 @@
     </style>
 </head>
 <body>
-
 <header class="no-print">
     <div class="logo-group">
         <div class="logo" style="line-height: 1; margin-bottom: 4px;">J&T <span style="font-weight:300; opacity:0.7;">EXPRESS</span></div>
         <div style="font-size: 10px; font-weight: 700; color: #94a3b8; letter-spacing: 0.8px; text-transform: uppercase; display: flex; align-items: center; gap: 5px;">
-            <span style="background: linear-gradient(90deg, #e62117, #ff5f57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">● AI POWERED</span> 
+            <span style="background: linear-gradient(90deg, #e62117, #ff5f57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">● AI POWERED</span>
             <span style="opacity: 0.8;">| HỆ THỐNG VẬN HÀNH THÔNG MINH</span>
         </div>
     </div>
@@ -76,7 +69,6 @@
         <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline"></div>
     </div>
 </header>
-
 <div class="container">
     <div id="app-body" style="display:none;">
         <div id="page-pt" class="page active">
@@ -95,13 +87,10 @@
                         <input type="file" id="file-jms" hidden onchange="doJMS(event)">
                     </div>
                 </div>
-
                 <div id="stats-area" class="stats-grid"></div>
-
                 <div id="res-pt"></div>
             </div>
         </div>
-
         <div id="page-kk" class="page">
             <div class="card-pro">
                 <h2 style="margin:0; font-size:24px; font-weight:900;">Barcode 128 + Đích Đến</h2>
@@ -110,7 +99,6 @@
             </div>
         </div>
     </div>
-
     <div class="premium-footer no-print">
         <div class="renew-card">
             <div class="qr-box"><img src="qr.png" alt="QR"></div>
@@ -121,7 +109,6 @@
             </div>
         </div>
     </div>
-
     <div class="disclaimer-container no-print">
         <b>TUYÊN BỐ MIỄN TRỪ TRÁCH NHIỆM:</b><br>
         1. <b>Về Bản Quyền:</b> Công cụ này là một dự án phần mềm độc lập, không thuộc sở hữu, không được ủy quyền hoặc quản lý bởi tập đoàn J&T Express. Logo và tên thương hiệu "J&T Express" chỉ được sử dụng nhằm mục đích mô tả đối tượng người dùng mục tiêu (nhân viên/bưu cục).<br>
@@ -135,13 +122,13 @@
     const AUTH_URL = "https://script.google.com/macros/s/AKfycbzeUhH2WjJm3gv2RYghiI1u864W70rCP2kouA5pTjcRC3Wa4jd_ghMS_dH0Bb0Ynh-3/exec";
     let DB = {}, CURRENT_DATA = [], SORT_COL = '', SORT_ASC = true;
 
+    // ====================== CODE CŨ GIỮ NGUYÊN ======================
     function showPage(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         el.classList.add('active');
     }
-
     function copyText(val, btn) {
         navigator.clipboard.writeText(val);
         const oldText = btn.innerText;
@@ -152,7 +139,6 @@
             btn.classList.remove('copied');
         }, 1200);
     }
-
     function handleAuth(r) {
         const p = JSON.parse(atob(r.credential.split('.')[1]));
         fetch(`${AUTH_URL}?action=checkAuth&email=${p.email}`).then(res => res.json()).then(d => {
@@ -162,11 +148,9 @@
             } else { alert("Tài khoản chưa kích hoạt!"); }
         });
     }
-
     function renderUserProfile(email, days) {
         document.getElementById('login-area').innerHTML = `<div style="text-align:right"><div style="font-weight:800;font-size:13px">👤 ${email}</div><div style="font-size:10px;color:var(--jt-red);font-weight:bold;">⏳ PREMIUM: ${days} NGÀY</div></div>`;
     }
-
     function doDM(e) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -177,30 +161,28 @@
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
-
     function doJMS(e) {
         const reader = new FileReader();
         reader.onload = function(e) {
             const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type:'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type:'array'}).SheetNames[0]], {header:1});
             const h = data[0] || [];
             const iW = h.findIndex(x => x && x.includes("Mã vận đơn")), iM = h.findIndex(x => x && x.includes("Mã 3 đoạn")), iD = h.findIndex(x => x && x.includes("Đích đến"));
-            
+           
             CURRENT_DATA = data.slice(1).filter(r => r[iW]).map(r => {
                 let m = iM!==-1?r[iM].toString().trim():"", info = DB[m] || {k:"?", t:"Mã lạ"};
                 return { code: r[iW].toString(), ma3: m, dich: (iD!==-1?r[iD]:"").toString(), khu: info.k, shipper: info.t };
             });
-            
-            renderStats(); // Tính toán thống kê
+           
+            renderStats();
             renderTable();
             document.getElementById('up-jms').classList.add('done');
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
-
     function renderStats() {
         const stats = {};
         CURRENT_DATA.forEach(d => { stats[d.shipper] = (stats[d.shipper] || 0) + 1; });
-        
+       
         let html = '';
         for (const [name, count] of Object.entries(stats)) {
             html += `<div class="stats-item">
@@ -210,21 +192,11 @@
         }
         document.getElementById('stats-area').innerHTML = html;
     }
-
     function sortData(col) {
         if (SORT_COL === col) SORT_ASC = !SORT_ASC; else { SORT_COL = col; SORT_ASC = true; }
         CURRENT_DATA.sort((a, b) => SORT_ASC ? a[col].toString().localeCompare(b[col].toString()) : b[col].toString().localeCompare(a[col].toString()));
         renderTable();
     }
-
-    function renderTable() {
-        let txt = `<table><thead><tr><th style="width:50px">STT</th><th onclick="sortData('code')">Mã Vận Đơn</th><th onclick="sortData('dich')">Đích Đến</th><th style="width:80px" onclick="sortData('ma3')">Mã 3Đ</th><th onclick="sortData('shipper')">Shipper</th></tr></thead><tbody>`;
-        CURRENT_DATA.forEach((d, i) => {
-            txt += `<tr><td>${i+1}</td><td><b>${d.code}</b><button class="btn-copy" onclick="copyText('${d.code}', this)">copy</button></td><td title="${d.dich}">${d.dich}</td><td>${d.ma3}</td><td style="color:var(--jt-red);font-weight:800">${d.shipper}</td></tr>`;
-        });
-        document.getElementById('res-pt').innerHTML = txt + "</tbody></table>";
-    }
-
     function doBulk() {
         const codes = document.getElementById('input-bulk').value.split(/\s+/).filter(c => c.length >= 8);
         const res = document.getElementById('res-bulk');
@@ -242,13 +214,150 @@
             JsBarcode(`#s-${i}`, code, { format:"CODE128", width:2.2, height:65, displayValue:true, fontSize:14 });
         });
     }
-
     function downloadMau() {
         const ws = XLSX.utils.aoa_to_sheet([["Mã 3 Đoạn", "Khu Vực", "Tên Shipper"], ["107", "Khu A", "Nam"]]);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Mau");
         XLSX.writeFile(wb, "Mau_PT.xlsx");
     }
+
+    // ====================== CODE CŨ: renderTable (sẽ được override nhẹ) ======================
+    function renderTable() {
+        let txt = `<table><thead><tr><th style="width:50px">STT</th><th onclick="sortData('code')">Mã Vận Đơn</th><th onclick="sortData('dich')">Đích Đến</th><th style="width:80px" onclick="sortData('ma3')">Mã 3Đ</th><th onclick="sortData('shipper')">Shipper</th><th style="width:320px">Hành Trình</th></tr></thead><tbody>`;
+        
+        CURRENT_DATA.forEach((d, i) => {
+            let trackingBtn = d.tracking ? 
+                `<button onclick="showTracking('${d.code}')" style="background:#fef3c7; color:#d97706; border:none; padding:6px 12px; border-radius:8px; font-size:12px; cursor:pointer;">📋 Xem hành trình</button>` :
+                `<button onclick="trackSingle('${d.code}')" style="background:#e0f2fe; color:#0369a1; border:none; padding:6px 12px; border-radius:8px; font-size:12px; cursor:pointer;">Tra hành trình</button>`;
+            
+            txt += `<tr>
+                <td>${i+1}</td>
+                <td><b>${d.code}</b><button class="btn-copy" onclick="copyText('${d.code}', this)">copy</button></td>
+                <td title="${d.dich}">${d.dich}</td>
+                <td>${d.ma3}</td>
+                <td style="color:var(--jt-red);font-weight:800">${d.shipper}</td>
+                <td>${trackingBtn}</td>
+            </tr>`;
+        });
+        document.getElementById('res-pt').innerHTML = txt + "</tbody></table>";
+    }
+
+    // ====================== PHẦN MỚI: TRA HÀNH TRÌNH (chỉ thêm) ======================
+    let TRACKING_CACHE = {};
+
+    async function callTrackingAPI(keyword) {
+        if (TRACKING_CACHE[keyword]) return TRACKING_CACHE[keyword];
+
+        const payload = {
+            keyword: keyword,
+            countryId: "1"
+        };
+
+        try {
+            const res = await fetch("https://jmsgw.jtexpress.vn/operatingplatform/podTracking/queryCssWork", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            TRACKING_CACHE[keyword] = data;
+            return data;
+        } catch (err) {
+            console.error(err);
+            return { error: "Không tra được hành trình - " + err.message };
+        }
+    }
+
+    async function trackSingle(code) {
+        const btn = event.currentTarget;
+        btn.innerHTML = "Đang tra...";
+        btn.disabled = true;
+
+        const data = await callTrackingAPI(code);
+        const item = CURRENT_DATA.find(x => x.code === code);
+        if (item) item.tracking = data;
+
+        renderTable(); // refresh bảng
+    }
+
+    function showTracking(code) {
+        const item = CURRENT_DATA.find(x => x.code === code);
+        if (!item || !item.tracking) return alert("Chưa có dữ liệu hành trình!");
+
+        const events = item.tracking.data?.list || item.tracking.list || item.tracking || [];
+
+        let html = `<h3 style="margin:0 0 20px 0;">📦 Hành trình - ${code}</h3>`;
+        
+        if (!Array.isArray(events) || events.length === 0) {
+            html += `<p>Không có dữ liệu hành trình</p>`;
+        } else {
+            html += `<div style="max-height:70vh; overflow:auto;">`;
+            events.forEach(e => {
+                const time = e.occurTime || e.time || e.createTime || e.updateTime || "—";
+                const status = e.statusDesc || e.status || e.eventDesc || e.remark || "Không rõ";
+                const loc = e.location || e.podStation || e.stationName || "";
+
+                html += `
+                    <div style="padding:12px 0; border-bottom:1px solid #f1f5f9;">
+                        <div style="color:#64748b; font-size:13px;">${time}</div>
+                        <div style="font-weight:700; margin:4px 0;">${status}</div>
+                        ${loc ? `<div style="font-size:13px; color:#475569;">${loc}</div>` : ''}
+                    </div>`;
+            });
+            html += `</div>`;
+        }
+
+        const modal = document.createElement('div');
+        modal.style = `position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;`;
+        modal.innerHTML = `
+            <div style="background:white;width:90%;max-width:700px;border-radius:20px;padding:25px;max-height:90vh;overflow:auto;">
+                ${html}
+                <div style="text-align:center;margin-top:20px;">
+                    <button onclick="this.closest('div[style*=\'position:fixed\']').remove()" 
+                            style="padding:10px 30px;background:var(--jt-red);color:white;border:none;border-radius:12px;font-weight:800;">
+                        Đóng
+                    </button>
+                </div>
+            </div>`;
+        document.body.appendChild(modal);
+    }
+
+    // Thêm nút tra tất cả (tùy chọn)
+    function addBulkTrackingButton() {
+        if (document.getElementById('bulk-track-btn')) return;
+        
+        const btn = document.createElement('button');
+        btn.id = 'bulk-track-btn';
+        btn.style = `margin:15px 0; background:var(--jt-red); color:white; border:none; padding:12px 24px; border-radius:12px; font-weight:800; font-size:14px; cursor:pointer;`;
+        btn.innerHTML = `🚀 Tra Hành Trình Tất Cả (${CURRENT_DATA.length} đơn)`;
+        btn.onclick = async () => {
+            btn.innerHTML = `Đang tra... 0/${CURRENT_DATA.length}`;
+            for (let i = 0; i < CURRENT_DATA.length; i++) {
+                const item = CURRENT_DATA[i];
+                btn.innerHTML = `Đang tra... ${i+1}/${CURRENT_DATA.length}`;
+                await callTrackingAPI(item.code);
+                item.tracking = TRACKING_CACHE[item.code];
+            }
+            btn.innerHTML = `✅ Đã tra xong ${CURRENT_DATA.length} đơn`;
+            renderTable();
+        };
+        document.getElementById('res-pt').parentNode.insertBefore(btn, document.getElementById('res-pt'));
+    }
+
+    // Override renderTable để tự động thêm nút
+    const oldRenderTable = renderTable;
+    renderTable = function() {
+        oldRenderTable();
+        setTimeout(addBulkTrackingButton, 100);
+    };
+
+    // ====================== KẾT THÚC PHẦN MỚI ======================
 </script>
 </body>
 </html>
