@@ -63,11 +63,19 @@
 <body>
 
 <header class="no-print">
-    <div class="logo">J&T <span style="font-weight:300; opacity:0.7;">EXPRESS</span></div>
+    <div class="logo-group" style="display: flex; flex-direction: column;">
+        <div class="logo" style="line-height: 1; margin-bottom: 4px;">J&T <span style="font-weight:300; opacity:0.7;">EXPRESS</span></div>
+        <div style="font-size: 10px; font-weight: 700; color: #94a3b8; letter-spacing: 0.8px; text-transform: uppercase; display: flex; align-items: center; gap: 5px;">
+            <span style="background: linear-gradient(90deg, #e62117, #ff5f57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">● AI POWERED</span> 
+            <span style="opacity: 0.8;">| HỆ THỐNG PHÂN TUYẾN THÔNG MINH</span>
+        </div>
+    </div>
+
     <div class="nav-tabs">
         <div class="tab active" onclick="showPage('page-pt', this)">PHÂN TUYẾN đơn</div>
         <div class="tab" onclick="showPage('page-kk', this)">DÁN MÃ hàng loạt</div>
     </div>
+
     <div id="login-area">
         <div id="g_id_onload" data-client_id="850864834737-40v7posjfcq42avv71jv6f38u5tip2fq.apps.googleusercontent.com" data-callback="handleAuth"></div>
         <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline"></div>
