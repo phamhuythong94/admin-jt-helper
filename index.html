@@ -12,11 +12,19 @@
         body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--jt-dark); margin: 0; padding: 0; }
         
         /* Header & Nav */
-        header { background: white; height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #edf2f7; }
+        header { background: white; height: 85px; display: flex; align-items: center; justify-content: space-between; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #edf2f7; }
         .logo { font-size: 28px; font-weight: 900; color: var(--jt-red); letter-spacing: -1.5px; }
         .nav-tabs { display: flex; background: #f1f5f9; padding: 6px; border-radius: 16px; gap: 5px; }
         .tab { padding: 12px 28px; cursor: pointer; border-radius: 12px; font-weight: 800; font-size: 13px; color: #64748b; transition: 0.3s; }
         .tab.active { background: white; color: var(--jt-red); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+        /* Account Info Section */
+        .user-profile { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+        .user-email { font-size: 13px; font-weight: 800; color: #1e293b; }
+        .user-status { display: flex; gap: 6px; }
+        .badge { font-size: 10px; font-weight: 900; padding: 3px 10px; border-radius: 50px; text-transform: uppercase; }
+        .badge-type { background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1; }
+        .badge-time { background: #fef2f2; color: var(--jt-red); border: 1px solid #fee2e2; }
 
         .container { max-width: 1050px; margin: 40px auto; padding: 0 20px; }
         .card-pro { background: white; border-radius: 30px; padding: 45px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,1); }
@@ -54,7 +62,7 @@
         .btn-main { background: var(--jt-dark); color: white; border: none; padding: 14px 35px; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(30, 41, 59, 0.2); }
         .btn-main:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(30, 41, 59, 0.3); }
 
-        /* GIA HẠN SECTION - TRANG TRÍ ĐẸP */
+        /* GIA HẠN SECTION */
         .premium-footer { margin-top: 80px; padding-bottom: 60px; text-align: center; }
         .renew-card { 
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
@@ -151,11 +159,11 @@
                 <p class="renew-note">
                     Chuyển khoản ghi nội dung: <b>Email của bạn</b><br>
                     Hệ thống sẽ tự động kích hoạt ngay sau khi nhận được.<br>
-                    <span style="opacity:0.6; font-size:11px;">Hỗ trợ Admin: phamhuythong94@gmail.com 0389899388 ZALO </span>
+                    <span style="opacity:0.6; font-size:11px;">Hỗ trợ Admin: phamhuythong94@gmail.com 0389899388 zalo </span>
                 </p>
             </div>
         </div>
-        <p style="margin-top:40px; color:#cbd5e1; font-size:11px; letter-spacing:1px;">J&T LOGISTICS AUTOMATION SYSTEM v3.0</p>
+        <p style="margin-top:40px; color:#cbd5e1; font-size:11px; letter-spacing:1px;">J&T LOGISTICS AUTOMATION SYSTEM v4.0</p>
     </div>
 </div>
 
@@ -174,11 +182,27 @@
     function handleAuth(r) {
         const p = JSON.parse(atob(r.credential.split('.')[1]));
         fetch(`${AUTH_URL}?action=checkAuth&email=${p.email}`).then(res => res.json()).then(d => {
+            // d.status: "success", d.daysLeft: số ngày còn lại (ví dụ 7), d.type: "Standard" hoặc "Premium"
             if(d.status === "success") {
-                document.getElementById('login-area').innerHTML = `<div style="background:#f1f5f9; padding:8px 15px; border-radius:12px; font-size:12px; font-weight:800; color:#1e293b;">👤 ${p.email}</div>`;
+                renderUserProfile(p.email, d.type || 'Standard', d.daysLeft || 7);
                 document.getElementById('app-body').style.display = 'block';
-            } else { alert("Tài khoản chưa gia hạn!"); }
+            } else { 
+                alert("Tài khoản chưa được kích hoạt hoặc hết hạn!"); 
+            }
         });
+    }
+
+    function renderUserProfile(email, type, days) {
+        const area = document.getElementById('login-area');
+        area.innerHTML = `
+            <div class="user-profile">
+                <span class="user-email">👤 ${email}</span>
+                <div class="user-status">
+                    <span class="badge badge-type">${type}</span>
+                    <span class="badge badge-time">⏳ Còn ${days} ngày</span>
+                </div>
+            </div>
+        `;
     }
 
     function doDM(e) {
