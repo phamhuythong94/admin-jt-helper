@@ -23,7 +23,7 @@
         .badge-time { background: #fef2f2; color: var(--jt-red); border: 1px solid #fee2e2; }
         .urgent { background: #e62117 !important; color: white !important; animation: blinker 1s linear infinite; }
         @keyframes blinker { 50% { opacity: 0.3; } }
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .container { max-width: 1250px; margin: 40px auto; padding: 0 20px; }
         .card-pro { background: white; border-radius: 30px; padding: 45px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,1); }
         .grid-upload { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 35px 0; }
         .upload-item { background: #ffffff; border: 2.5px dashed #e2e8f0; padding: 40px 20px; border-radius: 24px; text-align: center; cursor: pointer; transition: 0.4s; }
@@ -31,28 +31,33 @@
         .upload-item.done { border-color: #22c55e; background: #f0fdf4; border-style: solid; }
         .upload-item b { font-size: 17px; display: block; margin-bottom: 8px; color: #1e293b; }
         .upload-item small { color: #94a3b8; font-weight: 500; }
-        .bulk-textarea { width: 100%; height: 200px; padding: 25px; border-radius: 20px; border: 2px solid #f1f5f9; font-family: 'JetBrains Mono', monospace; font-size: 16px; outline: none; margin-top: 20px; box-sizing: border-box; }
-        .barcode-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 35px; }
-        .barcode-strip { background: white; padding: 20px 30px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #f1f5f9; }
-        .barcode-info h2 { margin: 0; color: var(--jt-red); font-size: 26px; font-weight: 900; }
-        .stats-row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
-        .stat-box { background: white; padding: 18px 25px; border-radius: 18px; border: 1px solid #f1f5f9; min-width: 140px; }
-        .stat-box div { font-size: 22px; font-weight: 900; color: var(--jt-red); margin-top: 5px; }
+        
+        /* Table Styles */
         table { width: 100%; border-collapse: collapse; background: white; border-radius: 20px; overflow: hidden; }
         th { background: #f8fafc; padding: 18px; text-align: left; font-size: 12px; color: #64748b; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; cursor: pointer; user-select: none; position: relative; }
         th:hover { background: #f1f5f9; color: var(--jt-red); }
-        th::after { content: '↕'; position: absolute; right: 8px; opacity: 0.3; }
-        td { padding: 15px 18px; border-bottom: 1px solid #f8fafc; font-size: 14px; font-weight: 500; }
+        td { padding: 15px 18px; border-bottom: 1px solid #f8fafc; font-size: 14px; font-weight: 500; vertical-align: middle; }
+        
+        /* Copy Button Style */
+        .copy-btn { background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: 800; margin-left: 8px; transition: 0.2s; display: inline-flex; align-items: center; }
+        .copy-btn:hover { background: var(--jt-dark); color: white; border-color: var(--jt-dark); }
+        .copy-btn:active { transform: scale(0.9); }
+        .code-wrapper { display: flex; align-items: center; white-space: nowrap; }
+
         .btn-main { background: var(--jt-dark); color: white; border: none; padding: 14px 35px; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-        .premium-footer { margin-top: 80px; padding-bottom: 60px; text-align: center; }
-        .renew-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); display: inline-flex; align-items: center; gap: 35px; padding: 35px 50px; border-radius: 35px; color: white; position: relative; overflow: hidden; }
-        .qr-box { background: white; padding: 12px; border-radius: 20px; }
-        .renew-tag { background: var(--jt-red); color: white; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; margin-bottom: 15px; display: inline-block; }
-        .copyright-area { border-top: 1px solid #e2e8f0; margin-top: 50px; padding-top: 30px; color: #94a3b8; font-size: 12px; }
+        .stats-row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
+        .stat-box { background: white; padding: 18px 25px; border-radius: 18px; border: 1px solid #f1f5f9; min-width: 140px; }
+        .stat-box div { font-size: 22px; font-weight: 900; color: var(--jt-red); margin-top: 5px; }
+
         .page { display: none; }
         .page.active { display: block; animation: zoomIn 0.3s ease-out; }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        @media print { .no-print, header, .grid-upload, .bulk-textarea, footer, .premium-footer { display: none !important; } .container { margin: 0; max-width: 100%; } .barcode-strip { border: 1.5px solid #000; margin-bottom: 15px; page-break-inside: avoid; border-radius: 0; } }
+        
+        .premium-footer { margin-top: 80px; padding-bottom: 60px; text-align: center; }
+        .renew-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); display: inline-flex; align-items: center; gap: 35px; padding: 35px 50px; border-radius: 35px; color: white; position: relative; }
+        .qr-box { background: white; padding: 12px; border-radius: 20px; }
+        
+        @media print { .no-print, header, .grid-upload, footer, .premium-footer, .copy-btn { display: none !important; } .container { margin: 0; max-width: 100%; } }
     </style>
 </head>
 <body>
@@ -96,25 +101,22 @@
         <div id="page-kk" class="page">
             <div class="card-pro">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                    <div>
-                        <h2 style="margin:0; font-size:24px; font-weight:900;">In Tem Barcode Hàng Loạt</h2>
-                        <p style="color:#94a3b8; font-size:14px; margin-top:8px;">Dán danh sách mã đơn vào đây, hệ thống tự động vẽ mã vạch để in.</p>
-                    </div>
+                    <div><h2 style="margin:0; font-size:24px; font-weight:900;">In Tem Barcode Hàng Loạt</h2></div>
                     <button class="btn-main" onclick="window.print()">🖨️ IN TẤT CẢ TEM</button>
                 </div>
-                <textarea class="bulk-textarea" id="input-bulk" placeholder="Dán mã vận đơn tại đây (mỗi mã một dòng)..." oninput="doBulk()"></textarea>
-                <div id="bulk-info" style="margin-top:15px; font-weight:900; color:var(--jt-red); font-size:15px;">Chưa có mã nào</div>
-                <div id="res-bulk" class="barcode-grid"></div>
+                <textarea class="bulk-textarea" style="width:100%; height:150px; margin-top:20px; border-radius:15px; padding:15px; border:2px solid #f1f5f9;" id="input-bulk" placeholder="Dán mã vận đơn..." oninput="doBulk()"></textarea>
+                <div id="res-bulk" style="margin-top:30px;"></div>
             </div>
         </div>
     </div>
+
     <div class="premium-footer no-print">
         <div class="renew-card">
-            <div class="qr-box"><img src="qr.png" style="width:130px; display:block;"></div>
-            <div class="renew-info">
-                <div class="renew-tag">💎 GÓI THÀNH VIÊN PREMIUM</div>
-                <div class="renew-price">50,000đ <span>/ 30 Ngày</span></div>
-                <p class="renew-note">Chuyển khoản ghi nội dung: <b>Email của bạn</b></p>
+            <div class="qr-box"><img src="qr.png" style="width:120px; display:block;"></div>
+            <div class="renew-info" style="text-align:left; margin-left:20px; color:white;">
+                <div style="font-weight:900; color:var(--jt-red); background:white; display:inline-block; padding:2px 8px; border-radius:5px; font-size:10px; margin-bottom:10px;">PREMIUM</div>
+                <div style="font-size:24px; font-weight:900;">50,000đ / tháng</div>
+                <div style="font-size:12px; opacity:0.8;">Nội dung CK: Email của mày</div>
             </div>
         </div>
     </div>
@@ -146,6 +148,20 @@
     function renderUserProfile(email, type, days) {
         const area = document.getElementById('login-area');
         area.innerHTML = `<div class="user-profile"><span class="user-email">👤 ${email}</span><div class="user-status"><span class="badge badge-type">${type}</span><span class="badge badge-time ${days<=3?'urgent':''}">⏳ Còn ${days} ngày</span></div></div>`;
+    }
+
+    function copyToClipboard(text, btn) {
+        navigator.clipboard.writeText(text).then(() => {
+            const oldText = btn.innerText;
+            btn.innerText = "ĐÃ COPY!";
+            btn.style.background = "#22c55e";
+            btn.style.color = "white";
+            setTimeout(() => {
+                btn.innerText = oldText;
+                btn.style.background = "";
+                btn.style.color = "";
+            }, 1000);
+        });
     }
 
     function doDM(e) {
@@ -203,7 +219,12 @@
         CURRENT_DATA.forEach((d, index) => {
             h += `<tr>
                 <td style="color:#94a3b8; font-size:12px">${index + 1}</td>
-                <td><b>${d.code}</b></td>
+                <td>
+                    <div class="code-wrapper">
+                        <b>${d.code}</b>
+                        <button class="copy-btn" onclick="copyToClipboard('${d.code}', this)">COPY</button>
+                    </div>
+                </td>
                 <td><span style="background:#eee;padding:2px 6px;border-radius:4px">${d.ma3}</span></td>
                 <td><small>${d.dich}</small></td>
                 <td>${d.khu}</td>
@@ -223,28 +244,12 @@
         renderTable();
     }
 
-    function doBulk() {
-        const val = document.getElementById('input-bulk').value;
-        const codes = val.split(/\n/).map(c => c.trim()).filter(c => c.length >= 10);
-        const res = document.getElementById('res-bulk');
-        res.innerHTML = "";
-        document.getElementById('bulk-info').innerText = "🚀 Đang xử lý " + codes.length + " mã";
-        codes.forEach((code, idx) => {
-            let info = DB[code.slice(-3)] || {k:"N/A", t:"MÃ CHƯA PHÂN"};
-            let item = document.createElement('div');
-            item.className = 'barcode-strip';
-            item.innerHTML = `<svg id="b-svg-${idx}"></svg><div class="barcode-info"><h2>${info.t}</h2><p>${info.k}</p><small>${code}</small></div>`;
-            res.appendChild(item);
-            JsBarcode(`#b-svg-${idx}`, code, {format:"CODE128", width:2.5, height:80, displayValue:false, margin:0});
-        });
-    }
-
     function downloadMau() {
-        const wsData = [ ["Mã 3 Đoạn", "Khu Vực", "Tên Shipper"], ["107", "Vùng A", "Shipper 1"] ];
+        const wsData = [ ["Mã 3 Đoạn", "Khu Vực", "Tên Shipper"], ["107", "Phường A", "Sơn"] ];
         const ws = XLSX.utils.aoa_to_sheet(wsData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Mau");
-        XLSX.writeFile(wb, "Mau_JT.xlsx");
+        XLSX.writeFile(wb, "Mau_J&T.xlsx");
     }
 </script>
 </body>
