@@ -26,14 +26,12 @@
         .badge-type { background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1; }
         .badge-time { background: #fef2f2; color: var(--jt-red); border: 1px solid #fee2e2; }
         
-        /* HIỆU ỨNG NHÁY ĐỎ KHI SẮP HẾT HẠN */
         .urgent { background: #e62117 !important; color: white !important; animation: blinker 1s linear infinite; }
         @keyframes blinker { 50% { opacity: 0.3; } }
 
         .container { max-width: 1050px; margin: 40px auto; padding: 0 20px; }
         .card-pro { background: white; border-radius: 30px; padding: 45px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,1); }
         
-        /* Upload Grid */
         .grid-upload { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 35px 0; }
         .upload-item { background: #ffffff; border: 2.5px dashed #e2e8f0; padding: 40px 20px; border-radius: 24px; text-align: center; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .upload-item:hover { border-color: var(--jt-red); background: #fffafa; transform: translateY(-8px); }
@@ -41,11 +39,9 @@
         .upload-item b { font-size: 17px; display: block; margin-bottom: 8px; color: #1e293b; }
         .upload-item small { color: #94a3b8; font-weight: 500; }
 
-        /* Bulk Area */
         .bulk-textarea { width: 100%; height: 200px; padding: 25px; border-radius: 20px; border: 2px solid #f1f5f9; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 16px; outline: none; transition: 0.3s; background: #fcfdfe; margin-top: 20px; box-sizing: border-box; }
         .bulk-textarea:focus { border-color: var(--jt-red); background: white; box-shadow: 0 0 0 5px rgba(230, 33, 23, 0.05); }
         
-        /* Barcode Result */
         .barcode-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 35px; }
         .barcode-strip { background: white; padding: 20px 30px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #f1f5f9; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.02); }
         .barcode-strip svg { height: 85px; width: 300px; }
@@ -53,7 +49,6 @@
         .barcode-info h2 { margin: 0; color: var(--jt-red); font-size: 26px; font-weight: 900; }
         .barcode-info p { margin: 6px 0; color: #475569; font-weight: 700; font-size: 15px; }
 
-        /* Stats & Table */
         .stats-row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
         .stat-box { background: white; padding: 18px 25px; border-radius: 18px; border: 1px solid #f1f5f9; box-shadow: 0 4px 6px rgba(0,0,0,0.02); min-width: 140px; }
         .stat-box small { font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 800; letter-spacing: 0.5px; }
@@ -66,7 +61,6 @@
         .btn-main { background: var(--jt-dark); color: white; border: none; padding: 14px 35px; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(30, 41, 59, 0.2); }
         .btn-main:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(30, 41, 59, 0.3); }
 
-        /* GIA HẠN SECTION */
         .premium-footer { margin-top: 80px; padding-bottom: 60px; text-align: center; }
         .renew-card { 
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
@@ -84,7 +78,6 @@
         .renew-note { font-size: 13px; color: #94a3b8; line-height: 1.6; }
         .renew-note b { color: #facc15; }
 
-        /* COPYRIGHT SECTION */
         .copyright-area { border-top: 1px solid #e2e8f0; margin-top: 50px; padding-top: 30px; color: #94a3b8; font-size: 12px; }
         .contact-pill { display: inline-flex; align-items: center; gap: 15px; background: #fff; padding: 8px 20px; border-radius: 50px; border: 1px solid #e2e8f0; margin-top: 15px; }
         .contact-pill span { color: #475569; font-weight: 700; }
@@ -202,12 +195,10 @@
     function handleAuth(r) {
         const p = JSON.parse(atob(r.credential.split('.')[1]));
         fetch(`${AUTH_URL}?action=checkAuth&email=${p.email}`).then(res => res.json()).then(d => {
-            // KIỂM TRA HẾT HẠN NGAY TẠI ĐÂY
             if(d.status === "success" && d.daysLeft > 0) {
                 renderUserProfile(p.email, d.type || 'Standard', d.daysLeft);
                 document.getElementById('app-body').style.display = 'block';
             } else { 
-                // NẾU HẾT HẠN THÌ ẨN HẾT VÀ BÁO LỖI
                 document.getElementById('app-body').style.display = 'none';
                 alert("Tài khoản " + p.email + " đã hết hạn hoặc chưa kích hoạt. Vui lòng liên hệ Admin!"); 
             }
@@ -218,7 +209,6 @@
 
     function renderUserProfile(email, type, days) {
         const area = document.getElementById('login-area');
-        // Nếu dưới 3 ngày thì thêm class 'urgent' để nó nháy đỏ
         const urgentClass = days <= 3 ? 'urgent' : '';
         area.innerHTML = `
             <div class="user-profile">
@@ -234,11 +224,14 @@
     function doDM(e) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type:'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type:'array'}).SheetNames[0]], {header:1});
+            const workbook = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+            const data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header:1});
             DB = {};
-            data.slice(1).forEach(r => { if(r[0]) DB[r[0].toString().trim()] = {k:r[1], t:r[2]}; });
+            data.slice(1).forEach(r => { 
+                if(r[0]) DB[r[0].toString().trim()] = {k: r[1] || "?", t: r[2] || "Chưa tên"}; 
+            });
             document.getElementById('up-dm').classList.add('done');
-            document.getElementById('lab-dm').innerText = "✅ " + Object.keys(DB).length + " bưu cục";
+            document.getElementById('lab-dm').innerText = "✅ " + Object.keys(DB).length + " mã đã nạp";
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
@@ -246,17 +239,41 @@
     function doJMS(e) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type:'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type:'array'}).SheetNames[0]], {header:1});
-            let h = `<table><thead><tr><th>Mã Đơn</th><th>Khu Vực</th><th>Shipper</th></tr></thead><tbody>`;
+            const workbook = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+            const data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header:1});
+            
+            // TỰ ĐỘNG TÌM CỘT DỰA TRÊN HEADER FILE JMS
+            const headers = data[0] || [];
+            const idxWaybill = headers.findIndex(h => h && h.toString().includes("Mã vận đơn"));
+            const idxMa3Doan = headers.findIndex(h => h && h.toString().includes("Mã 3 đoạn"));
+
+            if(idxWaybill === -1 || idxMa3Doan === -1) {
+                alert("File không đúng định dạng JMS (Thiếu cột Mã vận đơn hoặc Mã 3 đoạn)");
+                return;
+            }
+
+            let h = `<table><thead><tr><th>Mã Đơn</th><th>Mã 3Đ</th><th>Khu Vực</th><th>Shipper</th></tr></thead><tbody>`;
             let st = {};
+            
             data.slice(1).forEach(row => {
-                let code = row.find(c => c && c.toString().length >= 10);
-                if(code) {
-                    let info = DB[code.toString().slice(-3)] || {k:"?", t:"Mã lạ"};
-                    h += `<tr><td><b>...${code.toString().slice(-6)}</b></td><td>${info.k}</td><td style="color:var(--jt-red); font-weight:900;">${info.t}</td></tr>`;
+                let code = row[idxWaybill];
+                let ma3 = row[idxMa3Doan];
+
+                if(code && ma3) {
+                    let sCode = code.toString().trim();
+                    let sMa3 = ma3.toString().trim();
+                    let info = DB[sMa3] || {k:"?", t:"Mã lạ ("+sMa3+")"};
+                    
+                    h += `<tr>
+                            <td><b>...${sCode.slice(-6)}</b></td>
+                            <td><span style="background:#eee;padding:2px 6px;border-radius:4px">${sMa3}</span></td>
+                            <td>${info.k}</td>
+                            <td style="color:var(--jt-red); font-weight:900;">${info.t}</td>
+                          </tr>`;
                     st[info.t] = (st[info.t] || 0) + 1;
                 }
             });
+
             document.getElementById('res-pt').innerHTML = h + "</tbody></table>";
             let sh = "";
             for(let s in st) sh += `<div class="stat-box"><small>${s}</small><div>${st[s]} đơn</div></div>`;
@@ -266,29 +283,35 @@
         reader.readAsArrayBuffer(e.target.files[0]);
     }
 
+    let bulkTimeout;
     function doBulk() {
-        const val = document.getElementById('input-bulk').value;
-        const codes = val.split(/\n/).map(c => c.trim()).filter(c => c.length >= 10);
-        const res = document.getElementById('res-bulk');
-        res.innerHTML = "";
-        document.getElementById('bulk-info').innerText = "🚀 Đang xử lý " + codes.length + " mã đơn hàng";
+        clearTimeout(bulkTimeout);
+        bulkTimeout = setTimeout(() => {
+            const val = document.getElementById('input-bulk').value;
+            const codes = val.split(/\n/).map(c => c.trim()).filter(c => c.length >= 10);
+            const res = document.getElementById('res-bulk');
+            res.innerHTML = "";
+            document.getElementById('bulk-info').innerText = "🚀 Đang xử lý " + codes.length + " mã đơn hàng";
 
-        codes.forEach((code, idx) => {
-            let info = DB[code.slice(-3)] || {k:"N/A", t:"MÃ CHƯA PHÂN"};
-            let item = document.createElement('div');
-            item.className = 'barcode-strip';
-            item.innerHTML = `<svg id="b-svg-${idx}"></svg><div class="barcode-info"><h2>${info.t}</h2><p>${info.k}</p><small style="font-family:monospace">${code}</small></div>`;
-            res.appendChild(item);
-            JsBarcode(`#b-svg-${idx}`, code, {format:"CODE128", width:2.5, height:80, displayValue:false, margin:0});
-        });
+            codes.forEach((code, idx) => {
+                // Với tính năng in tem hàng loạt, ta vẫn dùng 3 số cuối vận đơn 
+                // vì thường tem này dùng để dán nhãn phân loại nhanh theo 3 số cuối
+                let info = DB[code.slice(-3)] || {k:"N/A", t:"MÃ CHƯA PHÂN"};
+                let item = document.createElement('div');
+                item.className = 'barcode-strip';
+                item.innerHTML = `<svg id="b-svg-${idx}"></svg><div class="barcode-info"><h2>${info.t}</h2><p>${info.k}</p><small style="font-family:monospace">${code}</small></div>`;
+                res.appendChild(item);
+                JsBarcode(`#b-svg-${idx}`, code, {format:"CODE128", width:2.5, height:80, displayValue:false, margin:0});
+            });
+        }, 500); // Đợi 0.5s sau khi ngừng gõ mới render để tránh lag
     }
 
     function downloadMau() {
-        const wsData = [ ["Mã Đoạn 3", "Khu Vực", "Tên Shipper"], ["101", "P. Chánh Lộ", "Tèo Shipper"], ["102", "P. Nghĩa Lộ", "Tý Logistics"] ];
+        const wsData = [ ["Mã 3 Đoạn", "Khu Vực", "Tên Shipper"], ["107", "P. Chánh Lộ", "Tèo Shipper"], ["016", "P. Nghĩa Lộ", "Tý Logistics"] ];
         const ws = XLSX.utils.aoa_to_sheet(wsData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Mau");
-        XLSX.writeFile(wb, "Mau_Danh_Muc_JT.xlsx");
+        XLSX.writeFile(wb, "Mau_Danh_Muc_Shipper.xlsx");
     }
 </script>
 </body>
