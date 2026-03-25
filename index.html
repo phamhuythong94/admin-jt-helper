@@ -3,172 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&T EXPRESS - HỆ THỐNG PHÂN TUYẾN PRO 2025</title>
+    <title>J&T EXPRESS - PHÂN TUYẾN TỰ ĐỘNG 2025</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        :root { --jt-red: #e62117; --jt-dark: #c41a12; --bg-gray: #f4f7f6; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-gray); margin: 0; padding: 15px; display: flex; justify-content: center; min-height: 100vh; }
-        .container { background: white; width: 100%; max-width: 700px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); margin-top: 20px; text-align: center; }
+        :root { --jt-red: #e62117; --bg: #f5f6fa; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin:0; padding: 20px; display: flex; justify-content: center; }
+        .container { background: white; width: 100%; max-width: 650px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
         
-        h1 { color: var(--jt-red); margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -1px; }
-        .version { font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 20px; font-weight: bold; }
+        h1 { color: var(--jt-red); margin: 0; font-size: 28px; font-weight: 800; }
+        .tagline { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
 
-        #login-section { padding: 40px 0; border: 1px dashed #ddd; border-radius: 15px; margin: 20px 0; }
-        #tool-section { display: none; }
-
-        .user-badge { background: #fff3f3; color: var(--jt-red); padding: 12px; border-radius: 12px; font-weight: bold; font-size: 14px; margin-bottom: 20px; border: 1px solid #ffcccc; display: flex; justify-content: space-between; align-items: center; }
+        /* GHI CHÚ HƯỚNG DẪN */
+        .instruction-box { background: #fff5f5; border: 1px solid #ffcccc; padding: 15px; border-radius: 12px; margin-bottom: 25px; text-align: left; }
+        .instruction-box b { color: var(--jt-red); display: block; margin-bottom: 5px; font-size: 14px; }
+        .instruction-box p { margin: 3px 0; font-size: 13px; color: #444; line-height: 1.5; }
         
-        .upload-box { border: 2px dashed #cbd5e0; padding: 30px 20px; border-radius: 15px; background: #fafafa; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
-        .upload-box:hover { border-color: var(--jt-red); background: #fff1f0; }
-        #file-input { display: none; }
+        .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .card { border: 2px dashed #ddd; padding: 25px 15px; border-radius: 15px; cursor: pointer; transition: 0.3s; background: #fafafa; position: relative; }
+        .card:hover { border-color: var(--jt-red); background: #fff1f0; }
+        .card.done { border-color: #27ae60; background: #f0fff4; }
+        .card b { font-size: 13px; display: block; margin-bottom: 5px; }
+        .card small { font-size: 11px; color: #888; }
 
-        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        .btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; color: white; transition: 0.3s; font-size: 14px; }
-        .btn-excel { background: #27ae60; }
-        .btn-print { background: #2980b9; }
+        .user-info { background: #333; color: white; padding: 10px 15px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; }
+        .btn-print { background: var(--jt-red); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 16px; box-shadow: 0 4px 10px rgba(230, 33, 23, 0.2); }
+        .btn-sample { background: #636e72; color: white; text-decoration: none; padding: 5px 10px; border-radius: 5px; font-size: 11px; display: inline-block; margin-top: 5px; }
 
-        .stats-container { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: left; border: 1px solid #eee; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 10px; }
-        .stat-item { background: white; padding: 8px; border-radius: 8px; font-size: 13px; border-left: 4px solid var(--jt-red); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; margin-top: 20px; text-align: left; }
+        th { padding: 10px; font-size: 12px; color: #99aab5; text-transform: uppercase; }
+        td { background: white; padding: 12px; border: 1px solid #f1f1f1; font-size: 14px; }
+        td:first-child { border-radius: 10px 0 0 10px; }
+        td:last-child { border-radius: 0 10px 10px 0; }
 
-        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
-        th { color: #99aab5; font-size: 11px; text-transform: uppercase; padding: 10px; text-align: left; }
-        tr.item-row td { background: white; padding: 12px; border: 1px solid #f1f1f1; }
-        tr.item-row td:first-child { border-radius: 10px 0 0 10px; }
-        tr.item-row td:last-child { border-radius: 0 10px 10px 0; }
-        
-        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 13px; }
-        .qr-area { background: #f9f9f9; padding: 20px; border-radius: 20px; border: 1px solid #eee; margin-top: 20px; }
-        .qr-code { width: 220px; height: 220px; border-radius: 10px; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .payment-note { color: var(--jt-red); font-weight: 800; font-size: 16px; margin: 15px 0 5px 0; }
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666; }
+        .qr-frame { background: #f9f9f9; padding: 20px; border-radius: 15px; margin-top: 15px; border: 1px solid #eee; }
+        .qr-img { width: 200px; border-radius: 10px; margin-top: 10px; border: 3px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        @media print {
-            .upload-box, .btn-group, .footer, #login-section, .user-badge { display: none !important; }
-            body { background: white; padding: 0; }
-            .container { box-shadow: none; max-width: 100%; margin: 0; }
-        }
+        @media print { .instruction-box, .upload-grid, .footer, #login-section, .user-info, .btn-print { display: none !important; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>J&T EXPRESS</h1>
-        <div class="version">Hệ thống xử lý Excel & Phân tuyến Admin</div>
+    <h1>J&T EXPRESS</h1>
+    <div class="tagline">Hệ thống phân tuyến Admin chuyên nghiệp</div>
+
+    <div id="login-section" style="padding: 40px 0;">
+        <p style="font-size:14px; color:#666;">Vui lòng đăng nhập Google để bắt đầu</p>
+        <center><div id="g_id_onload" data-client_id="850864834737-40v7posjfcq42avv71jv6f38u5tip2fq.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div><div class="g_id_signin" data-type="standard"></div></center>
     </div>
 
-    <div id="login-section">
-        <p style="color:#666; font-size: 14px;">Đăng nhập Google để bắt đầu phiên làm việc</p>
-        <center>
-            <div id="g_id_onload" data-client_id="850864834737-40v7posjfcq42avv71jv6f38u5tip2fq.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
-            <div class="g_id_signin" data-type="standard" data-shape="pill" data-size="large"></div>
-        </center>
-    </div>
+    <div id="tool-section" style="display:none;">
+        <div class="user-info"><span id="u-mail">...</span><span id="u-exp">--/--</span></div>
 
-    <div id="tool-section">
-        <div class="user-badge">
-            <span id="user-email">...</span>
-            <span id="user-expiry" style="font-size:11px; background:var(--jt-red); color:white; padding:3px 10px; border-radius:20px;">Hạn: --/--</span>
-        </div>
-        
-        <div class="upload-box" onclick="document.getElementById('file-input').click()">
-            <span>📂 Nhấn vào đây để nạp file Excel từ JMS</span>
-            <input type="file" id="file-input" accept=".xlsx, .xls, .csv" onchange="handleFile(event)">
+        <div class="instruction-box">
+            <b>📝 HƯỚNG DẪN TẠO DANH MỤC:</b>
+            <p>1. Tạo file Excel gồm 3 cột: <b>Mã Đoạn 3 | Khu Vực | Tên Shipper</b></p>
+            <p>2. Lưu file và nạp vào ô <b>"NẠP DANH MỤC"</b> bên dưới.</p>
+            <p>3. Chỉ cần nạp 1 lần duy nhất cho mỗi phiên làm việc.</p>
+            <a href="#" class="btn-sample" onclick="downloadSample()">📥 Tải File Mẫu (.xlsx)</a>
         </div>
 
-        <div class="btn-group" id="action-btns" style="display:none">
-            <button class="btn btn-excel" onclick="exportExcel()">📥 Xuất Excel Phân Tuyến</button>
-            <button class="btn btn-print" onclick="window.print()">🖨️ In Danh Sách Giao Hàng</button>
+        <div class="upload-grid">
+            <div class="card" id="card-dm" onclick="document.getElementById('in-dm').click()">
+                <b>1. NẠP DANH MỤC 📂</b>
+                <small id="txt-dm">Chưa có dữ liệu</small>
+                <input type="file" id="in-dm" hidden accept=".xlsx, .xls" onchange="loadDM(event)">
+            </div>
+            <div class="card" id="card-data" onclick="document.getElementById('in-data').click()">
+                <b>2. NẠP FILE JMS 📄</b>
+                <small id="txt-data">Chờ file đơn hàng...</small>
+                <input type="file" id="in-data" hidden accept=".xlsx, .xls" onchange="loadJMS(event)">
+            </div>
         </div>
 
-        <div class="stats-container" id="stats-box" style="display:none">
-            <b style="font-size:14px; color:#333;">📊 BẢNG TỔNG HỢP SẢN LƯỢNG:</b>
-            <div class="stats-grid" id="stats-content"></div>
-        </div>
-
-        <div class="result-area" id="result-table"></div>
+        <div id="result-area"></div>
+        <button class="btn-print" id="btn-print" style="display:none;" onclick="window.print()">🖨️ IN DANH SÁCH GIAO HÀNG</button>
     </div>
 
     <div class="footer">
-        <div style="color:#333; font-weight:bold;">Bản quyền &copy; 2025 - Phát triển bởi phamhuythong94@gmail.com</div>
-        
-        <div class="qr-area">
-            <p style="margin:0; font-weight:bold; color:#555;">GIA HẠN DỊCH VỤ QUA MÃ QR</p>
-            <img src="qr.png" alt="Mã QR Chuyển Khoản" class="qr-code">
-            <div class="payment-note">NỘI DUNG CK: [TÊN EMAIL CỦA BẠN]</div>
-            <p style="font-size:12px; color:#888; font-style:italic;">(Ví dụ: phamhuythong1994@gmail.com)</p>
+        <div style="font-weight:bold;">© 2025 - Thiết kế bởi phamhuythong94@gmail.com</div>
+        <div class="qr-frame">
+            <p style="color:var(--jt-red); font-weight:800; margin:0;">GIA HẠN DỊCH VỤ QUA QR</p>
+            <img src="qr.png" class="qr-img">
+            <p style="font-size:14px; color:#333; font-weight:bold; margin-top:10px;">NỘI DUNG CK: [ĐỊA CHỈ EMAIL CỦA BẠN]</p>
         </div>
     </div>
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwukwW0tEYoW3j9RTKnkRXnOdNwkA9Yi6RdpdEBE7IjAbzOtswd-dVP1lGJaRNOXIwA/exec";
-    let SHIPPER_DB = {};
-    let FINAL_DATA = [];
+    const AUTH_URL = "https://script.google.com/macros/s/AKfycbwukwW0tEYoW3j9RTKnkRXnOdNwkA9Yi6RdpdEBE7IjAbzOtswd-dVP1lGJaRNOXIwA/exec";
+    let DB = {};
 
-    function handleCredentialResponse(response) {
-        const payload = JSON.parse(atob(response.credential.split('.')[1]));
-        document.getElementById('login-section').style.display = 'none';
-        document.getElementById('tool-section').style.display = 'block';
-        document.getElementById('user-email').innerText = payload.email;
-
-        fetch(`${SCRIPT_URL}?action=checkAuth&email=${payload.email}`)
-            .then(res => res.json()).then(data => {
-                document.getElementById('user-expiry').innerText = `Hạn dùng: ${new Date(data.expiry).toLocaleDateString('vi-VN')}`;
-                fetch(`${SCRIPT_URL}?action=getDanhMuc`).then(r => r.json()).then(db => { SHIPPER_DB = db; });
-            });
+    function handleCredentialResponse(r) {
+        const p = JSON.parse(atob(r.credential.split('.')[1]));
+        fetch(`${AUTH_URL}?action=checkAuth&email=${p.email}`).then(res => res.json()).then(d => {
+            if(d.status === "success") {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('tool-section').style.display = 'block';
+                document.getElementById('u-mail').innerText = p.email;
+                document.getElementById('u-exp').innerText = "Hạn: " + new Date(d.expiry).toLocaleDateString('vi-VN');
+            } else { alert("Hết hạn dùng! Vui lòng liên hệ Admin."); }
+        });
     }
 
-    function handleFile(e) {
-        const file = e.target.files[0];
+    function loadDM(e) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, {type: 'array'});
-            const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
-            processExcel(jsonData);
+            const wb = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
+            const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header: 1});
+            DB = {};
+            data.slice(1).forEach(r => { if(r[0]) DB[r[0].toString().trim()] = { k: r[1], t: r[2] }; });
+            document.getElementById('card-dm').classList.add('done');
+            document.getElementById('txt-dm').innerText = "✅ Đã nạp " + Object.keys(DB).length + " mã";
+            document.getElementById('txt-dm').style.color = "green";
         };
-        reader.readAsArrayBuffer(file);
+        reader.readAsArrayBuffer(e.target.files[0]);
     }
 
-    function processExcel(data) {
-        FINAL_DATA = [];
-        let stats = {};
-        let html = `<table><thead><tr><th>Mã Đơn</th><th>Khu Vực</th><th>Shipper</th></tr></thead><tbody>`;
-
-        data.slice(1).forEach(row => {
-            let billCode = row.find(cell => cell && cell.toString().length >= 10);
-            if (billCode) {
-                let codeStr = billCode.toString().trim();
-                let d3 = codeStr.slice(-3);
-                let info = SHIPPER_DB[d3] || { khu: "Mã lạ", ten: "Chưa phân" };
-                
-                FINAL_DATA.push({ "Mã Vận Đơn": codeStr, "Khu Vực": info.khu, "Người Giao": info.ten });
-                stats[info.ten] = (stats[info.ten] || 0) + 1;
-
-                html += `<tr class="item-row">
-                    <td><b class="code-text">...${codeStr.slice(-6)}</b></td>
-                    <td>${info.khu}</td>
-                    <td style="color:var(--jt-red); font-weight:bold">${info.ten}</td>
-                </tr>`;
-            }
-        });
-
-        document.getElementById('result-table').innerHTML = html + "</tbody></table>";
-        document.getElementById('action-btns').style.display = 'flex';
-        document.getElementById('stats-box').style.display = 'block';
-        
-        let statsHtml = "";
-        for (let s in stats) { statsHtml += `<div class="stat-item"><b>${s}</b>: ${stats[s]} đơn</div>`; }
-        document.getElementById('stats-content').innerHTML = statsHtml;
+    function loadJMS(e) {
+        if(Object.keys(DB).length === 0) { alert("Ní chưa nạp file Danh Mục kìa!"); return; }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const wb = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
+            const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header: 1});
+            let html = `<table><thead><tr><th>Mã Đơn</th><th>Khu Vực</th><th>Shipper</th></tr></thead><tbody>`;
+            data.slice(1).forEach(row => {
+                let code = row.find(c => c && c.toString().length >= 10);
+                if(code) {
+                    let d3 = code.toString().slice(-3);
+                    let info = DB[d3] || { k: "Mã lạ", t: "Chưa rõ" };
+                    html += `<tr><td>...${code.toString().slice(-6)}</td><td>${info.k}</td><td><b>${info.t}</b></td></tr>`;
+                }
+            });
+            document.getElementById('result-area').innerHTML = html + "</tbody></table>";
+            document.getElementById('card-data').classList.add('done');
+            document.getElementById('txt-data').innerText = "✅ Đã xử lý xong!";
+            document.getElementById('btn-print').style.display = "block";
+        };
+        reader.readAsArrayBuffer(e.target.files[0]);
     }
 
-    function exportExcel() {
-        const ws = XLSX.utils.json_to_sheet(FINAL_DATA);
+    // Hàm tạo file mẫu Excel cho khách
+    function downloadSample() {
+        const wsData = [ ["Mã Đoạn 3", "Khu Vực", "Tên Shipper"], ["101", "Phường 1", "Nguyễn Văn A"], ["102", "Phường 5", "Trần Thị B"] ];
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Phan_Tuyen_JT");
-        XLSX.writeFile(wb, "Phan_Tuyen_MyTho.xlsx");
+        XLSX.utils.book_append_sheet(wb, ws, "Danh_Muc_Mau");
+        XLSX.writeFile(wb, "Mau_Danh_Muc_JT.xlsx");
     }
 </script>
 </body>
