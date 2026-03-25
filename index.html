@@ -25,6 +25,10 @@
         .badge { font-size: 10px; font-weight: 900; padding: 3px 10px; border-radius: 50px; text-transform: uppercase; }
         .badge-type { background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1; }
         .badge-time { background: #fef2f2; color: var(--jt-red); border: 1px solid #fee2e2; }
+        
+        /* HIỆU ỨNG NHÁY ĐỎ KHI SẮP HẾT HẠN */
+        .urgent { background: #e62117 !important; color: white !important; animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0.3; } }
 
         .container { max-width: 1050px; margin: 40px auto; padding: 0 20px; }
         .card-pro { background: white; border-radius: 30px; padding: 45px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,1); }
@@ -184,7 +188,6 @@
 </div>
 
 <script>
-    // LINK MỚI CỦA NÍ ĐÃ CẬP NHẬT TẠI ĐÂY
     const AUTH_URL = "https://script.google.com/macros/s/AKfycbzeUhH2WjJm3gv2RYghiI1u864W70rCP2kouA5pTjcRC3Wa4jd_ghMS_dH0Bb0Ynh-3/exec";
     let DB = {};
 
@@ -199,27 +202,30 @@
     function handleAuth(r) {
         const p = JSON.parse(atob(r.credential.split('.')[1]));
         fetch(`${AUTH_URL}?action=checkAuth&email=${p.email}`).then(res => res.json()).then(d => {
-            if(d.status === "success") {
-                // Sử dụng daysLeft từ API trả về, mặc định 0 nếu lỗi
-                renderUserProfile(p.email, d.type || 'Standard', d.daysLeft !== undefined ? d.daysLeft : 0);
+            // KIỂM TRA HẾT HẠN NGAY TẠI ĐÂY
+            if(d.status === "success" && d.daysLeft > 0) {
+                renderUserProfile(p.email, d.type || 'Standard', d.daysLeft);
                 document.getElementById('app-body').style.display = 'block';
             } else { 
-                alert("Tài khoản chưa được kích hoạt hoặc hết hạn!"); 
+                // NẾU HẾT HẠN THÌ ẨN HẾT VÀ BÁO LỖI
+                document.getElementById('app-body').style.display = 'none';
+                alert("Tài khoản " + p.email + " đã hết hạn hoặc chưa kích hoạt. Vui lòng liên hệ Admin!"); 
             }
         }).catch(err => {
-            console.error("Lỗi kết nối API:", err);
-            alert("Không thể kết nối với hệ thống quản lý tài khoản!");
+            alert("Lỗi kết nối hệ thống!");
         });
     }
 
     function renderUserProfile(email, type, days) {
         const area = document.getElementById('login-area');
+        // Nếu dưới 3 ngày thì thêm class 'urgent' để nó nháy đỏ
+        const urgentClass = days <= 3 ? 'urgent' : '';
         area.innerHTML = `
             <div class="user-profile">
                 <span class="user-email">👤 ${email}</span>
                 <div class="user-status">
                     <span class="badge badge-type">${type}</span>
-                    <span class="badge badge-time">⏳ Còn ${days} ngày</span>
+                    <span class="badge badge-time ${urgentClass}">⏳ Còn ${days} ngày</span>
                 </div>
             </div>
         `;
