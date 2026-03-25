@@ -3,61 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&T EXPRESS PRO - PREMIUM LOGISTICS 2026</title>
+    <title>J&T EXPRESS PRO - AI LOGISTICS 2026</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        :root { --jt-red: #e62117; --jt-dark: #1e293b; --bg: #f8fafc; --shadow: rgba(0, 0, 0, 0.08); }
+        :root { --jt-red: #e62117; --jt-dark: #1e293b; --bg: #f8fafc; }
         body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--jt-dark); margin: 0; padding: 0; }
-        header { background: white; height: 85px; display: flex; align-items: center; justify-content: space-between; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #edf2f7; }
+        
+        /* Header & Logo AI */
+        header { background: white; height: 90px; display: flex; align-items: center; justify-content: space-between; padding: 0 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #edf2f7; }
         .logo { font-size: 28px; font-weight: 900; color: var(--jt-red); letter-spacing: -1.5px; }
         .nav-tabs { display: flex; background: #f1f5f9; padding: 6px; border-radius: 16px; gap: 5px; }
         .tab { padding: 12px 28px; cursor: pointer; border-radius: 12px; font-weight: 800; font-size: 13px; color: #64748b; transition: 0.3s; }
         .tab.active { background: white; color: var(--jt-red); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .user-profile { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-        .user-email { font-size: 13px; font-weight: 800; color: #1e293b; }
-        .user-status { display: flex; gap: 6px; }
-        .badge { font-size: 10px; font-weight: 900; padding: 3px 10px; border-radius: 50px; text-transform: uppercase; }
-        .badge-type { background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1; }
-        .badge-time { background: #fef2f2; color: var(--jt-red); border: 1px solid #fee2e2; }
-        .urgent { background: #e62117 !important; color: white !important; animation: blinker 1s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0.3; } }
+        
+        /* Container & Cards */
         .container { max-width: 1250px; margin: 40px auto; padding: 0 20px; }
         .card-pro { background: white; border-radius: 30px; padding: 45px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,1); }
+        
+        /* Page PT - Table */
         .grid-upload { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 35px 0; }
         .upload-item { background: #ffffff; border: 2.5px dashed #e2e8f0; padding: 40px 20px; border-radius: 24px; text-align: center; cursor: pointer; transition: 0.4s; }
         .upload-item:hover { border-color: var(--jt-red); background: #fffafa; transform: translateY(-8px); }
         .upload-item.done { border-color: #22c55e; background: #f0fdf4; border-style: solid; }
-        .upload-item b { font-size: 17px; display: block; margin-bottom: 8px; color: #1e293b; }
-        .upload-item small { color: #94a3b8; font-weight: 500; }
         
-        /* Table Styles */
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 20px; overflow: hidden; }
-        th { background: #f8fafc; padding: 18px; text-align: left; font-size: 12px; color: #64748b; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; cursor: pointer; user-select: none; position: relative; }
-        th:hover { background: #f1f5f9; color: var(--jt-red); }
-        td { padding: 15px 18px; border-bottom: 1px solid #f8fafc; font-size: 14px; font-weight: 500; vertical-align: middle; }
-        
-        /* Copy Button Style */
-        .copy-btn { background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: 800; margin-left: 8px; transition: 0.2s; display: inline-flex; align-items: center; }
-        .copy-btn:hover { background: var(--jt-dark); color: white; border-color: var(--jt-dark); }
-        .copy-btn:active { transform: scale(0.9); }
-        .code-wrapper { display: flex; align-items: center; white-space: nowrap; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 20px; overflow: hidden; margin-top: 20px; }
+        th { background: #f8fafc; padding: 18px; text-align: left; font-size: 12px; color: #64748b; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; cursor: pointer; }
+        td { padding: 15px 18px; border-bottom: 1px solid #f8fafc; font-size: 14px; font-weight: 500; }
 
-        .btn-main { background: var(--jt-dark); color: white; border: none; padding: 14px 35px; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-        .stats-row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
-        .stat-box { background: white; padding: 18px 25px; border-radius: 18px; border: 1px solid #f1f5f9; min-width: 140px; }
-        .stat-box div { font-size: 22px; font-weight: 900; color: var(--jt-red); margin-top: 5px; }
+        /* Page Barcode - Grid */
+        .barcode-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        .barcode-card { background: white; border: 1px solid #f1f5f9; padding: 20px; border-radius: 15px; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
+        .bulk-textarea { width: 100%; height: 120px; border-radius: 15px; padding: 15px; border: 2px solid #f1f5f9; font-family: monospace; box-sizing: border-box; }
+        .bulk-textarea:focus { border-color: var(--jt-red); outline: none; }
 
+        /* Footer & Disclaimer */
+        .disclaimer-text { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 30px; line-height: 1.6; font-style: italic; }
         .page { display: none; }
         .page.active { display: block; animation: zoomIn 0.3s ease-out; }
         @keyframes zoomIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         
-        .premium-footer { margin-top: 80px; padding-bottom: 60px; text-align: center; }
-        .renew-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); display: inline-flex; align-items: center; gap: 35px; padding: 35px 50px; border-radius: 35px; color: white; position: relative; }
-        .qr-box { background: white; padding: 12px; border-radius: 20px; }
-        
-        @media print { .no-print, header, .grid-upload, footer, .premium-footer, .copy-btn { display: none !important; } .container { margin: 0; max-width: 100%; } }
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body>
@@ -67,15 +54,13 @@
         <div class="logo" style="line-height: 1; margin-bottom: 4px;">J&T <span style="font-weight:300; opacity:0.7;">EXPRESS</span></div>
         <div style="font-size: 10px; font-weight: 700; color: #94a3b8; letter-spacing: 0.8px; text-transform: uppercase; display: flex; align-items: center; gap: 5px;">
             <span style="background: linear-gradient(90deg, #e62117, #ff5f57); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">● AI POWERED</span> 
-            <span style="opacity: 0.8;">| HỆ THỐNG PHÂN TUYẾN THÔNG MINH</span>
+            <span style="opacity: 0.8;">| HỆ THỐNG VẬN HÀNH THÔNG MINH</span>
         </div>
     </div>
-
     <div class="nav-tabs">
         <div class="tab active" onclick="showPage('page-pt', this)">PHÂN TUYẾN đơn</div>
-        <div class="tab" onclick="showPage('page-kk', this)">DÁN MÃ hàng loạt</div>
+        <div class="tab" onclick="showPage('page-kk', this)">TẠO BARCODE QUÉT MÃ</div>
     </div>
-
     <div id="login-area">
         <div id="g_id_onload" data-client_id="850864834737-40v7posjfcq42avv71jv6f38u5tip2fq.apps.googleusercontent.com" data-callback="handleAuth"></div>
         <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline"></div>
@@ -87,44 +72,37 @@
         <div id="page-pt" class="page active">
             <div class="card-pro">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h2 style="margin:0; font-size:24px; font-weight:900;">Hệ Thống Phân Tuyến</h2>
-                    <a href="#" style="color:var(--jt-red); text-decoration:none; font-weight:800; font-size:13px;" onclick="downloadMau()">📥 TẢI FILE MẪU EXCEL</a>
+                    <h2 style="margin:0; font-size:24px; font-weight:900;">Phân Tuyến Shipper</h2>
+                    <a href="#" style="color:var(--jt-red); text-decoration:none; font-weight:800; font-size:13px;" onclick="downloadMau()">📥 TẢI FILE MẪU</a>
                 </div>
                 <div class="grid-upload">
                     <div class="upload-item" id="up-dm" onclick="document.getElementById('file-dm').click()">
-                        <b>Dán Danh Mục Shipper</b>
-                        <small id="lab-dm">File: Mã 3 cuối - Khu - Tên</small>
+                        <b>Nạp Danh Mục Shipper</b>
+                        <small id="lab-dm">File Excel (Mã 3đ - Khu - Tên)</small>
                         <input type="file" id="file-dm" hidden onchange="doDM(event)">
                     </div>
                     <div class="upload-item" id="up-jms" onclick="document.getElementById('file-jms').click()">
-                        <b>Nạp Đơn Hàng Từ JMS</b>
-                        <small id="lab-jms">Hệ thống sẽ tự động lọc shipper</small>
+                        <b>Nạp File Đơn JMS</b>
+                        <small id="lab-jms">Hệ thống AI tự động xử lý</small>
                         <input type="file" id="file-jms" hidden onchange="doJMS(event)">
                     </div>
                 </div>
-                <div id="stats-pt" class="stats-row"></div>
+                <div id="stats-pt" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;"></div>
                 <div id="res-pt"></div>
+                <div class="disclaimer-text">* Công cụ hỗ trợ vận hành cá nhân. Không mạo danh thương hiệu J&T Express.</div>
             </div>
         </div>
+
         <div id="page-kk" class="page">
             <div class="card-pro">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                    <div><h2 style="margin:0; font-size:24px; font-weight:900;">In Tem Barcode Hàng Loạt</h2></div>
-                    <button class="btn-main" onclick="window.print()">🖨️ IN TẤT CẢ TEM</button>
-                </div>
-                <textarea class="bulk-textarea" style="width:100%; height:150px; margin-top:20px; border-radius:15px; padding:15px; border:2px solid #f1f5f9;" id="input-bulk" placeholder="Dán mã vận đơn..." oninput="doBulk()"></textarea>
-                <div id="res-bulk" style="margin-top:30px;"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="premium-footer no-print">
-        <div class="renew-card">
-            <div class="qr-box"><img src="qr.png" style="width:120px; display:block;"></div>
-            <div class="renew-info" style="text-align:left; margin-left:20px; color:white;">
-                <div style="font-weight:900; color:var(--jt-red); background:white; display:inline-block; padding:2px 8px; border-radius:5px; font-size:10px; margin-bottom:10px;">PREMIUM</div>
-                <div style="font-size:24px; font-weight:900;">50,000đ / tháng</div>
-                <div style="font-size:12px; opacity:0.8;">Nội dung CK: Email của mày</div>
+                <h2 style="margin:0; font-size:24px; font-weight:900;">Tạo Barcode 128 (Cho Máy Quét)</h2>
+                <p style="color: #64748b; font-size: 14px; margin: 10px 0 20px 0;">Dán mã vận đơn vào đây để hiện mã vạch. Máy quét sẽ đọc được trực tiếp từ màn hình.</p>
+                
+                <textarea class="bulk-textarea" id="input-bulk" 
+                    placeholder="Dán danh sách mã vào đây (ví dụ: 8614...)" 
+                    oninput="doBulk()"></textarea>
+                
+                <div id="res-bulk" class="barcode-grid"></div>
             </div>
         </div>
     </div>
@@ -133,8 +111,7 @@
 <script>
     const AUTH_URL = "https://script.google.com/macros/s/AKfycbzeUhH2WjJm3gv2RYghiI1u864W70rCP2kouA5pTjcRC3Wa4jd_ghMS_dH0Bb0Ynh-3/exec";
     let DB = {};
-    let CURRENT_DATA = []; 
-    let SORT_DIR = 1;
+    let CURRENT_DATA = [];
 
     function showPage(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -147,40 +124,25 @@
         const p = JSON.parse(atob(r.credential.split('.')[1]));
         fetch(`${AUTH_URL}?action=checkAuth&email=${p.email}`).then(res => res.json()).then(d => {
             if(d.status === "success" && d.daysLeft > 0) {
-                renderUserProfile(p.email, d.type || 'Standard', d.daysLeft);
+                renderUserProfile(p.email, d.daysLeft);
                 document.getElementById('app-body').style.display = 'block';
-            } else { alert("Tài khoản hết hạn!"); }
+            } else { alert("Tài khoản chưa kích hoạt hoặc hết hạn!"); }
         });
     }
 
-    function renderUserProfile(email, type, days) {
+    function renderUserProfile(email, days) {
         const area = document.getElementById('login-area');
-        area.innerHTML = `<div class="user-profile"><span class="user-email">👤 ${email}</span><div class="user-status"><span class="badge badge-type">${type}</span><span class="badge badge-time ${days<=3?'urgent':''}">⏳ Còn ${days} ngày</span></div></div>`;
-    }
-
-    function copyToClipboard(text, btn) {
-        navigator.clipboard.writeText(text).then(() => {
-            const oldText = btn.innerText;
-            btn.innerText = "ĐÃ COPY!";
-            btn.style.background = "#22c55e";
-            btn.style.color = "white";
-            setTimeout(() => {
-                btn.innerText = oldText;
-                btn.style.background = "";
-                btn.style.color = "";
-            }, 1000);
-        });
+        area.innerHTML = `<div style="text-align:right"><div style="font-weight:800;font-size:13px">👤 ${email}</div><div style="font-size:10px;color:var(--jt-red)">⏳ Premium: ${days} ngày</div></div>`;
     }
 
     function doDM(e) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const workbook = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
-            const data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header:1});
+            const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type:'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type:'array'}).SheetNames[0]], {header:1});
             DB = {};
             data.slice(1).forEach(r => { if(r[0]) DB[r[0].toString().trim()] = {k: r[1] || "?", t: r[2] || "Chưa tên"}; });
             document.getElementById('up-dm').classList.add('done');
-            document.getElementById('lab-dm').innerText = "✅ " + Object.keys(DB).length + " bưu cục";
+            document.getElementById('lab-dm').innerText = "✅ Đã nạp " + Object.keys(DB).length + " bưu cục";
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
@@ -188,25 +150,13 @@
     function doJMS(e) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const workbook = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
-            const data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header:1});
-            const headers = data[0] || [];
-            const idxWaybill = headers.findIndex(h => h && h.toString().includes("Mã vận đơn"));
-            const idxMa3Doan = headers.findIndex(h => h && h.toString().includes("Mã 3 đoạn"));
-            const idxDichDen = headers.findIndex(h => h && h.toString().includes("Đích đến"));
-
-            if(idxWaybill === -1 || idxMa3Doan === -1) { alert("File sai định dạng JMS!"); return; }
-
-            CURRENT_DATA = [];
-            data.slice(1).forEach(row => {
-                let code = row[idxWaybill];
-                let ma3 = row[idxMa3Doan];
-                let dich = row[idxDichDen] || "";
-                if(code && ma3) {
-                    let sMa3 = ma3.toString().trim();
-                    let info = DB[sMa3] || {k:"?", t:"Mã lạ ("+sMa3+")"};
-                    CURRENT_DATA.push({ code: code.toString(), ma3: sMa3, dich: dich.toString(), khu: info.k, shipper: info.t });
-                }
+            const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type:'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type:'array'}).SheetNames[0]], {header:1});
+            const h = data[0] || [];
+            const iW = h.findIndex(x => x && x.includes("Mã vận đơn")), iM = h.findIndex(x => x && x.includes("Mã 3 đoạn")), iD = h.findIndex(x => x && x.includes("Đích đến"));
+            if(iW === -1) return alert("Sai file JMS!");
+            CURRENT_DATA = data.slice(1).filter(r => r[iW]).map(r => {
+                let m = iM!==-1?r[iM].toString().trim():"", info = DB[m] || {k:"?", t:"Mã lạ"};
+                return { code: r[iW].toString(), ma3: m, dich: iD!==-1?r[iD]:"", khu: info.k, shipper: info.t };
             });
             renderTable();
             document.getElementById('up-jms').classList.add('done');
@@ -215,49 +165,29 @@
     }
 
     function renderTable() {
-        let h = `<table><thead><tr>
-            <th style="width:50px">STT</th>
-            <th onclick="sortTable('code')">Mã Vận Đơn</th>
-            <th onclick="sortTable('ma3')">Mã 3Đ</th>
-            <th onclick="sortTable('dich')">Đích Đến</th>
-            <th onclick="sortTable('khu')">Khu Vực</th>
-            <th onclick="sortTable('shipper')">Shipper</th>
-        </tr></thead><tbody>`;
-        let st = {};
-        CURRENT_DATA.forEach((d, index) => {
-            h += `<tr>
-                <td style="color:#94a3b8; font-size:12px">${index + 1}</td>
-                <td>
-                    <div class="code-wrapper">
-                        <b>${d.code}</b>
-                        <button class="copy-btn" onclick="copyToClipboard('${d.code}', this)">COPY</button>
-                    </div>
-                </td>
-                <td><span style="background:#eee;padding:2px 6px;border-radius:4px">${d.ma3}</span></td>
-                <td><small>${d.dich}</small></td>
-                <td>${d.khu}</td>
-                <td style="color:var(--jt-red); font-weight:900;">${d.shipper}</td>
-            </tr>`;
-            st[d.shipper] = (st[d.shipper] || 0) + 1;
+        let txt = `<table><thead><tr><th>STT</th><th>Mã Vận Đơn</th><th>Mã 3Đ</th><th>Khu Vực</th><th>Shipper</th></tr></thead><tbody>`;
+        CURRENT_DATA.forEach((d, i) => {
+            txt += `<tr><td>${i+1}</td><td><b>${d.code}</b></td><td>${d.ma3}</td><td>${d.khu}</td><td style="color:var(--jt-red);font-weight:800">${d.shipper}</td></tr>`;
         });
-        document.getElementById('res-pt').innerHTML = h + "</tbody></table>";
-        let sh = "";
-        for(let s in st) sh += `<div class="stat-box"><small>${s}</small><div>${st[s]} đơn</div></div>`;
-        document.getElementById('stats-pt').innerHTML = sh;
+        document.getElementById('res-pt').innerHTML = txt + "</tbody></table>";
     }
 
-    function sortTable(key) {
-        SORT_DIR *= -1;
-        CURRENT_DATA.sort((a, b) => a[key].localeCompare(b[key], undefined, {numeric: true}) * SORT_DIR);
-        renderTable();
+    function doBulk() {
+        const codes = document.getElementById('input-bulk').value.split(/\s+/).filter(c => c.length >= 8);
+        const res = document.getElementById('res-bulk');
+        res.innerHTML = "";
+        codes.forEach((code, i) => {
+            const card = document.createElement('div');
+            card.className = "barcode-card";
+            let info = DB[code.slice(-3)] || {t: "Shipper?"};
+            card.innerHTML = `<div style="width:100%; display:flex; justify-content:space-between; font-size:11px; font-weight:800; margin-bottom:5px;"><span>#${i+1}</span><span style="color:var(--jt-red)">${info.t}</span></div><svg id="s-${i}"></svg>`;
+            res.appendChild(card);
+            JsBarcode(`#s-${i}`, code, { format:"CODE128", width:2.2, height:70, displayValue:true, fontSize:14 });
+        });
     }
 
     function downloadMau() {
-        const wsData = [ ["Mã 3 Đoạn", "Khu Vực", "Tên Shipper"], ["107", "Phường A", "Sơn"] ];
-        const ws = XLSX.utils.aoa_to_sheet(wsData);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Mau");
-        XLSX.writeFile(wb, "Mau_J&T.xlsx");
+        XLSX.writeFile(XLSX.utils.book_new(), "Mau.xlsx");
     }
 </script>
 </body>
