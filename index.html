@@ -3,137 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&T EXPRESS - PRO LOGISTICS TOOL 2025</title>
+    <title>J&T LOGISTICS ENTERPRISE 2025</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        :root { --jt-red: #e62117; --jt-dark: #c41a12; --bg: #f8fafc; --text: #1e293b; }
-        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
-        .container { background: white; width: 100%; max-width: 800px; padding: 35px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); text-align: center; border: 1px solid rgba(0,0,0,0.05); transition: 0.3s; }
+        :root { --jt-red: #e62117; --bg: #f8fafc; --text: #1e293b; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { background: white; width: 100%; max-width: 850px; padding: 30px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); text-align: center; }
         
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .logo-area h1 { color: var(--jt-red); margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1.5px; }
-        .logo-area span { font-size: 11px; background: #fee2e2; color: var(--jt-red); padding: 4px 10px; border-radius: 20px; font-weight: 800; }
+        /* Header & User */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .logo h1 { color: var(--jt-red); margin: 0; font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+        .user-pill { background: #1e293b; color: white; padding: 8px 15px; border-radius: 50px; font-size: 12px; display: flex; align-items: center; gap: 8px; }
 
-        .user-pill { background: #1e293b; color: white; padding: 8px 16px; border-radius: 50px; font-size: 12px; display: flex; align-items: center; gap: 10px; }
-        .status-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 10px #22c55e; }
+        /* Upload Cards */
+        .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .card { border: 2px dashed #e2e8f0; padding: 25px; border-radius: 20px; cursor: pointer; background: #fff; transition: 0.3s; }
+        .card:hover { border-color: var(--jt-red); background: #fef2f2; }
+        .card.active { border-color: #22c55e; background: #f0fdf4; border-style: solid; }
+        .card b { display: block; margin-bottom: 5px; font-size: 14px; }
 
-        /* Step Instruction */
-        .guide-card { background: linear-gradient(135deg, #fff5f5 0%, #fff 100%); border-left: 5px solid var(--jt-red); padding: 20px; border-radius: 16px; margin-bottom: 25px; text-align: left; position: relative; overflow: hidden; }
-        .guide-card b { color: var(--jt-red); font-size: 15px; margin-bottom: 8px; display: block; }
-        .guide-card p { margin: 4px 0; font-size: 13px; color: #475569; }
-        .btn-sample { position: absolute; right: 20px; top: 20px; background: white; border: 1px solid #ddd; padding: 6px 12px; border-radius: 8px; text-decoration: none; color: #64748b; font-size: 12px; font-weight: bold; transition: 0.2s; }
-        .btn-sample:hover { border-color: var(--jt-red); color: var(--jt-red); }
-
-        /* Upload Section */
-        .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .upload-card { border: 2px dashed #e2e8f0; padding: 30px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; background: #ffffff; }
-        .upload-card:hover { border-color: var(--jt-red); background: #fef2f2; transform: translateY(-3px); }
-        .upload-card.done { border-color: #22c55e; background: #f0fdf4; border-style: solid; }
-        .upload-card i { font-size: 24px; display: block; margin-bottom: 10px; }
-        .upload-card span { font-weight: 700; color: #334155; font-size: 14px; }
-        .upload-card small { display: block; margin-top: 5px; color: #94a3b8; font-size: 11px; }
-
-        /* Dashboard Stats */
-        .stats-grid { display: none; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; text-align: left; }
-        .stat-card { background: #f8fafc; padding: 15px; border-radius: 16px; border: 1px solid #f1f5f9; }
-        .stat-card b { font-size: 12px; color: #64748b; text-transform: uppercase; }
-        .stat-card .val { font-size: 20px; font-weight: 800; color: var(--jt-red); display: block; }
-        .progress-bar { height: 6px; background: #e2e8f0; border-radius: 10px; margin-top: 8px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--jt-red); border-radius: 10px; }
-
-        /* Search & Controls */
-        .controls { display: flex; gap: 10px; margin-bottom: 20px; opacity: 0; transition: 0.5s; }
-        .search-input { flex: 1; padding: 14px 20px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 14px; outline: none; transition: 0.3s; }
-        .search-input:focus { border-color: var(--jt-red); box-shadow: 0 0 0 4px rgba(230, 33, 23, 0.1); }
-        .btn-print { background: #1e293b; color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-
-        /* Table Design */
-        .table-container { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        /* Barcode Table */
+        .table-wrap { background: white; border-radius: 16px; overflow: hidden; border: 1px solid #f1f5f9; margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { background: #f8fafc; padding: 15px 20px; font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
-        td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-        tr:last-child td { border-bottom: none; }
-        .badge-khu { background: #f1f5f9; color: #475569; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
-        .shipper-name { font-weight: 800; color: #0f172a; }
+        th { background: #f8fafc; padding: 12px 20px; font-size: 11px; color: #64748b; text-transform: uppercase; }
+        td { padding: 12px 20px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .barcode-svg { width: 120px; height: 40px; }
+        .shipper-tag { background: #fee2e2; color: var(--jt-red); padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 13px; }
+
+        /* Stats & Search */
+        .controls { display: flex; gap: 10px; margin: 20px 0; }
+        .search-box { flex: 1; padding: 12px 20px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none; }
+        .btn { padding: 12px 20px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-red { background: var(--jt-red); color: white; }
 
         /* Footer & QR */
-        .footer { margin-top: 50px; border-top: 1px solid #f1f5f9; padding-top: 30px; color: #94a3b8; font-size: 13px; }
-        .qr-section { display: flex; align-items: center; justify-content: center; gap: 30px; margin-top: 20px; background: #f8fafc; padding: 25px; border-radius: 20px; }
-        .qr-img { width: 150px; border: 4px solid white; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .pay-text { text-align: left; }
-        .pay-text b { color: var(--jt-red); font-size: 16px; display: block; }
-
-        @media print { .upload-grid, .guide-card, .footer, #login-section, .btn-print, .search-input { display: none !important; } .container { box-shadow: none; padding: 0; max-width: 100%; } }
+        .footer { margin-top: 40px; border-top: 1px solid #eee; padding-top: 25px; }
+        .qr-box { background: #f8fafc; padding: 20px; border-radius: 20px; display: inline-flex; align-items: center; gap: 20px; margin-top: 10px; }
+        
+        /* In nhãn kiểm kho */
+        @media print {
+            .card, .header, .controls, .footer, .instruction, #login-section { display: none !important; }
+            .container { box-shadow: none; padding: 0; max-width: 100%; }
+            .barcode-svg { width: 200px !important; height: 80px !important; }
+            td { padding: 20px; border: 1px solid #eee; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header-top">
-        <div class="logo-area">
-            <h1>J&T <span id="mode-text">EXPRESS</span></h1>
-            <span>ULTIMATE PRO 2025</span>
-        </div>
-        <div id="user-badge-area" style="display:none;">
-            <div class="user-pill">
-                <div class="status-dot"></div>
-                <span id="u-email">...</span>
-                <span id="u-exp" style="color: #94a3b8;">--/--</span>
-            </div>
-        </div>
+    <div class="header">
+        <div class="logo"><h1>J&T EXPRESS <span>PRO</span></h1></div>
+        <div id="user-area" style="display:none;"><div class="user-pill"><span id="u-mail">...</span></div></div>
     </div>
 
-    <div id="login-section">
-        <div style="padding: 60px 0;">
-            <p style="font-weight: 600; color: #64748b;">Hệ thống yêu cầu xác thực quyền truy cập</p>
-            <center><div id="g_id_onload" data-client_id="850864834737-40v7posjfcq42avv71jv6f38u5tip2fq.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div><div class="g_id_signin" data-type="standard" data-shape="pill"></div></center>
-        </div>
+    <div id="login-section" style="padding: 50px 0;">
+        <center><div id="g_id_onload" data-client_id="850864834737-40v7posjfcq42avv71jv6f38u5tip2fq.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div><div class="g_id_signin" data-type="standard"></div></center>
     </div>
 
     <div id="tool-section" style="display:none;">
-        <div class="guide-card">
-            <b>🚀 Cài đặt bưu cục cực nhanh:</b>
-            <p>1. Chuẩn bị file Excel: <b>Mã Đoạn 3 | Khu Vực | Tên Shipper</b></p>
-            <p>2. Nạp file Danh mục trước, sau đó nạp file đơn hàng JMS.</p>
-            <a href="#" class="btn-sample" onclick="downloadSample()">📥 Tải mẫu Excel</a>
-        </div>
-
         <div class="upload-grid">
-            <div class="upload-card" id="card-dm" onclick="document.getElementById('in-dm').click()">
-                <i>📂</i>
-                <span>DANH MỤC SHIPPER</span>
-                <small id="txt-dm">Chưa có dữ liệu bưu cục</small>
-                <input type="file" id="in-dm" hidden accept=".xlsx, .xls" onchange="loadDM(event)">
+            <div class="card" id="c-dm" onclick="document.getElementById('i-dm').click()">
+                <b>1. DANH MỤC KIỂM KHO 📂</b>
+                <small id="t-dm">Nạp Excel: Mã-Khu-Tên</small>
+                <input type="file" id="i-dm" hidden onchange="loadDM(event)">
             </div>
-            <div class="upload-card" id="card-data" onclick="document.getElementById('in-data').click()">
-                <i>📄</i>
-                <span>FILE ĐƠN HÀNG (JMS)</span>
-                <small id="txt-data">Chọn file Excel để phân tuyến</small>
-                <input type="file" id="in-data" hidden accept=".xlsx, .xls" onchange="loadJMS(event)">
+            <div class="card" id="c-data" onclick="document.getElementById('i-data').click()">
+                <b>2. FILE JMS ĐƠN HÀNG 📄</b>
+                <small id="t-data">Nạp Excel xuất từ hệ thống</small>
+                <input type="file" id="i-data" hidden onchange="loadJMS(event)">
             </div>
         </div>
 
-        <div class="stats-grid" id="stats-box"></div>
-
-        <div class="controls" id="controls-bar">
-            <input type="text" class="search-input" id="search-box" placeholder="🔍 Tìm nhanh mã đơn, khu vực hoặc shipper..." onkeyup="filterTable()">
-            <button class="btn-print" onclick="window.print()">🖨️ IN DANH SÁCH</button>
+        <div class="controls" id="ctrl" style="display:none;">
+            <input type="text" class="search-box" id="search" placeholder="🔍 Quét mã hoặc tìm shipper..." onkeyup="filter()">
+            <button class="btn btn-red" onclick="window.print()">🖨️ IN NHÃN KIỂM KHO</button>
         </div>
 
-        <div class="table-container">
-            <div id="result-area"></div>
-        </div>
+        <div class="table-wrap"><div id="res"></div></div>
     </div>
 
     <div class="footer">
-        <p>Copyright &copy; 2025. Developed by <b>phamhuythong94@gmail.com</b></p>
-        <div class="qr-section">
-            <img src="qr.png" class="qr-img">
-            <div class="pay-text">
-                <b>GIA HẠN DỊCH VỤ 365 NGÀY</b>
-                <p style="margin: 5px 0 0 0;">Nội dung CK: <mark style="background: #ffeb3b; padding: 2px 5px; font-weight: bold;">Tên Email của bạn</mark></p>
-                <p style="font-size: 11px; color: #94a3b8; margin-top: 5px;">Hệ thống tự động kích hoạt sau khi nhận được yêu cầu.</p>
+        <div class="qr-box">
+            <img src="qr.png" style="width:120px; border-radius:10px;">
+            <div style="text-align:left;">
+                <b style="color:var(--jt-red);">GIA HẠN SAAS 2025</b>
+                <p style="margin:5px 0; font-size:12px;">Nội dung CK: <span style="background:#ff0; font-weight:bold;">Tên Email của bạn</span></p>
+                <small style="color:#888;">Hệ thống tự động kích hoạt sau khi nhận tiền.</small>
             </div>
         </div>
     </div>
@@ -141,8 +99,7 @@
 
 <script>
     const AUTH_URL = "https://script.google.com/macros/s/AKfycbwukwW0tEYoW3j9RTKnkRXnOdNwkA9Yi6RdpdEBE7IjAbzOtswd-dVP1lGJaRNOXIwA/exec";
-    let DB = {};
-    let RAW_LIST = [];
+    let DB = {}; let LIST = [];
 
     function handleCredentialResponse(r) {
         const p = JSON.parse(atob(r.credential.split('.')[1]));
@@ -150,93 +107,65 @@
             if(d.status === "success") {
                 document.getElementById('login-section').style.display = 'none';
                 document.getElementById('tool-section').style.display = 'block';
-                document.getElementById('user-badge-area').style.display = 'block';
-                document.getElementById('u-email').innerText = p.email;
-                document.getElementById('u-exp').innerText = "Hạn: " + new Date(d.expiry).toLocaleDateString('vi-VN');
-            } else { alert("Tài khoản hết hạn dùng!"); }
+                document.getElementById('user-area').style.display = 'block';
+                document.getElementById('u-mail').innerText = p.email;
+            } else { alert("Hết hạn dùng!"); }
         });
     }
 
     function loadDM(e) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const wb = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
-            const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header: 1});
+            const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type: 'array'}).SheetNames[0]], {header: 1});
             DB = {};
-            data.slice(1).forEach(r => { if(r[0]) DB[r[0].toString().trim()] = { k: r[1] || "N/A", t: r[2] || "N/A" }; });
-            document.getElementById('card-dm').classList.add('done');
-            document.getElementById('txt-dm').innerText = "✅ Đã nạp " + Object.keys(DB).length + " mã";
+            data.slice(1).forEach(r => { if(r[0]) DB[r[0].toString().trim()] = { k: r[1], t: r[2] }; });
+            document.getElementById('c-dm').classList.add('active');
+            document.getElementById('t-dm').innerText = "✅ Đã nạp " + Object.keys(DB).length + " bưu cục";
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
 
     function loadJMS(e) {
-        if(Object.keys(DB).length === 0) { alert("Ní chưa nạp file Danh Mục kìa!"); return; }
+        if(Object.keys(DB).length === 0) { alert("Nạp file danh mục trước ní ơi!"); return; }
         const reader = new FileReader();
         reader.onload = function(e) {
-            const wb = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
-            const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header: 1});
-            RAW_LIST = [];
-            let stats = {};
-            let total = 0;
-
+            const data = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), {type: 'array'}).Sheets[XLSX.read(new Uint8Array(e.target.result), {type: 'array'}).SheetNames[0]], {header: 1});
+            LIST = [];
             data.slice(1).forEach(row => {
                 let code = row.find(c => c && c.toString().length >= 10);
                 if(code) {
                     let d3 = code.toString().slice(-3);
-                    let info = DB[d3] || { k: "Mã lạ", t: "Chưa rõ" };
-                    RAW_LIST.push({ code: code.toString(), khu: info.k, ten: info.t });
-                    stats[info.t] = (stats[info.t] || 0) + 1;
-                    total++;
+                    let info = DB[d3] || { k: "Lạ", t: "Chưa rõ" };
+                    LIST.push({ code: code.toString(), khu: info.k, ten: info.t });
                 }
             });
-
-            renderTable(RAW_LIST);
-            renderStats(stats, total);
-            document.getElementById('controls-bar').style.opacity = "1";
-            document.getElementById('card-data').classList.add('done');
-            document.getElementById('txt-data').innerText = "✅ Đã xử lý " + total + " đơn";
+            render(LIST);
+            document.getElementById('ctrl').style.display = 'flex';
+            document.getElementById('c-data').classList.add('active');
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     }
 
-    function renderTable(list) {
-        let html = `<table><thead><tr><th>Mã Đơn (6 cuối)</th><th>Khu Vực</th><th>Shipper</th></tr></thead><tbody>`;
-        list.forEach(item => {
-            html += `<tr class="data-row">
-                <td><code style="font-weight:bold; color:#1e293b">...${item.code.slice(-6)}</code></td>
-                <td><span class="badge-khu">${item.khu}</span></td>
-                <td class="shipper-name">${item.ten}</td>
+    function render(data) {
+        let h = `<table><thead><tr><th>Mã Vạch Kiểm Kho</th><th>Thông tin đơn</th><th>Shipper</th></tr></thead><tbody>`;
+        data.forEach((item, idx) => {
+            h += `<tr>
+                <td><svg id="barcode-${idx}"></svg></td>
+                <td><small style="color:#888">Mã:</small> <b>...${item.code.slice(-6)}</b><br><small>Khu:</small> ${item.khu}</td>
+                <td><span class="shipper-tag">${item.ten}</span></td>
             </tr>`;
         });
-        document.getElementById('result-area').innerHTML = html + "</tbody></table>";
+        document.getElementById('res').innerHTML = h + "</tbody></table>";
+        // Vẽ mã vạch sau khi tạo bảng
+        data.forEach((item, idx) => {
+            JsBarcode(`#barcode-${idx}`, item.code, { format: "CODE128", width: 1.5, height: 40, displayValue: false, margin: 0 });
+        });
     }
 
-    function renderStats(stats, total) {
-        let html = "";
-        for (let s in stats) {
-            let pct = (stats[s] / total * 100).toFixed(0);
-            html += `<div class="stat-card">
-                <b>${s}</b> <span class="val">${stats[s]} đơn</span>
-                <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-            </div>`;
-        }
-        document.getElementById('stats-box').innerHTML = html;
-        document.getElementById('stats-box').style.display = "grid";
-    }
-
-    function filterTable() {
-        let val = document.getElementById('search-box').value.toLowerCase();
-        let filtered = RAW_LIST.filter(i => i.code.includes(val) || i.khu.toLowerCase().includes(val) || i.ten.toLowerCase().includes(val));
-        renderTable(filtered);
-    }
-
-    function downloadSample() {
-        const wsData = [ ["Mã Đoạn 3", "Khu Vực", "Tên Shipper"], ["101", "Phường 1", "Nguyễn Văn A"], ["102", "Phường 5", "Trần Thị B"] ];
-        const ws = XLSX.utils.aoa_to_sheet(wsData);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-        XLSX.writeFile(wb, "Mau_Danh_Muc_JT.xlsx");
+    function filter() {
+        let v = document.getElementById('search').value.toLowerCase();
+        let f = LIST.filter(i => i.code.includes(v) || i.ten.toLowerCase().includes(v) || i.khu.toLowerCase().includes(v));
+        render(f);
     }
 </script>
 </body>
