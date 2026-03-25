@@ -3,156 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J&T Mỹ Tho - Hệ Thống Phân Tuyến Admin</title>
+    <title>J&T Mỹ Tho - Excel Auto Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        :root { --jt-red: #e62117; --bg-gray: #f4f7f6; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-gray); margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { background: white; width: 100%; max-width: 600px; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
-        .logo-area { margin-bottom: 20px; }
-        h2 { color: var(--jt-red); margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px; }
-        .sub-title { color: #666; font-size: 14px; margin-bottom: 30px; display: block; }
+        :root { --jt-red: #e62117; --jt-dark: #c41a12; --bg-gray: #f0f2f5; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-gray); margin: 0; padding: 15px; display: flex; justify-content: center; min-height: 100vh; }
+        .container { background: white; width: 100%; max-width: 600px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); margin-top: 20px; text-align: center; }
         
-        /* Login Section */
-        #login-section { padding: 40px 0; border: 1px dashed #ddd; border-radius: 10px; background: #fff; }
-        .login-hint { font-size: 14px; color: #888; margin-bottom: 20px; }
+        h1 { color: var(--jt-red); margin: 0; font-size: 26px; font-weight: 800; }
+        .version { font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 20px; font-weight: bold; }
 
-        /* Tool Section */
+        #login-section { padding: 40px 0; }
         #tool-section { display: none; }
-        .user-badge { background: #fff3f3; color: var(--jt-red); padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; margin-bottom: 20px; border: 1px solid #ffcccc; }
-        
-        textarea { width: 100%; height: 150px; border: 2px solid #eee; border-radius: 12px; padding: 15px; font-size: 16px; box-sizing: border-box; transition: 0.3s; margin-bottom: 15px; resize: none; }
-        textarea:focus { border-color: var(--jt-red); outline: none; box-shadow: 0 0 8px rgba(230, 33, 23, 0.2); }
-        
-        .btn-main { background: var(--jt-red); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(230, 33, 23, 0.3); }
-        .btn-main:hover { background: #c41a12; transform: translateY(-2px); }
 
-        /* Result Table */
-        .result-container { margin-top: 25px; text-align: left; }
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; }
-        th { background: #f8f9fa; color: #666; font-size: 13px; text-transform: uppercase; padding: 12px; text-align: left; border-bottom: 2px solid #eee; }
-        td { padding: 12px; border-bottom: 1px solid #f1f1f1; font-size: 15px; }
-        .shipper-tag { color: var(--jt-red); font-weight: bold; display: flex; align-items: center; }
-        .shipper-tag::before { content: '👤'; margin-right: 5px; font-size: 12px; }
-        .code-tag { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #333; }
-        .loading { display: none; margin-top: 10px; font-style: italic; color: #888; }
+        .user-badge { background: #fff3f3; color: var(--jt-red); padding: 12px; border-radius: 12px; font-weight: bold; font-size: 14px; margin-bottom: 20px; border: 1px solid #ffcccc; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Excel Upload Box */
+        .upload-box { border: 2px dashed #cbd5e0; padding: 40px 20px; border-radius: 15px; background: #fafafa; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
+        .upload-box:hover { border-color: var(--jt-red); background: #fff1f0; }
+        .upload-box i { font-size: 40px; display: block; margin-bottom: 10px; }
+        #file-input { display: none; }
+
+        .btn-reset { background: #636e72; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+
+        /* Results */
+        .result-area { margin-top: 30px; text-align: left; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        th { color: #99aab5; font-size: 11px; text-transform: uppercase; padding: 0 15px; }
+        tr.item-row td { background: white; padding: 15px; border: 1px solid #f1f1f1; }
+        tr.item-row td:first-child { border-radius: 12px 0 0 12px; }
+        tr.item-row td:last-child { border-radius: 0 12px 12px 0; }
+        
+        .code-text { font-family: monospace; font-weight: bold; color: #2d3436; }
+        .shipper-text { color: var(--jt-red); font-weight: 800; }
+        .loading { font-size: 13px; color: #888; display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="logo-area">
-        <h2>J&T EXPRESS MỸ THO</h2>
-        <span class="sub-title">Trợ Lý Phân Tuyến Admin (Phiên bản SaaS)</span>
+    <div class="header">
+        <h1>J&T EXPRESS</h1>
+        <div class="version">Hệ thống xử lý Excel Mỹ Tho</div>
     </div>
 
     <div id="login-section">
-        <p class="login-hint">Vui lòng đăng nhập Google để kích hoạt dùng thử 7 ngày</p>
+        <p style="color:#666">Đăng nhập để sử dụng tính năng nạp Excel</p>
         <center>
             <div id="g_id_onload"
-                 data-client_id="809942326574-1tg04gt5qneislkh95cs1jlbc1s4nu84.apps.googleusercontent.com"
+                 data-client_id="850864834737-40v7posjfcq42avv71jv6f38u5tip2fq.apps.googleusercontent.com"
                  data-callback="handleCredentialResponse">
             </div>
-            <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
+            <div class="g_id_signin" data-type="standard" data-shape="pill"></div>
         </center>
     </div>
 
     <div id="tool-section">
-        <div class="user-badge" id="user-info">Đang kiểm tra bản quyền...</div>
+        <div class="user-badge">
+            <span id="user-email">...</span>
+            <span style="font-size:11px; background:var(--jt-red); color:white; padding:2px 8px; border-radius:10px;" id="user-expiry">Hạn: --/--</span>
+        </div>
         
-        <textarea id="input-data" placeholder="Dán danh sách mã vận đơn từ JMS vào đây..."></textarea>
-        
-        <button class="btn-main" onclick="processData()">BẮT ĐẦU PHÂN TUYẾN 🚀</button>
-        <div id="loading-text" class="loading">Đang đối soát dữ liệu từ Google Sheets...</div>
+        <div class="upload-box" onclick="document.getElementById('file-input').click()">
+            <span>📂 Nhấn vào đây để chọn file Excel từ JMS</span>
+            <input type="file" id="file-input" accept=".xlsx, .xls, .csv" onchange="handleFile(event)">
+        </div>
+        <p id="file-name" style="font-size: 13px; color: #2ecc71; font-weight: bold;"></p>
+        <div id="sync-msg" class="loading">Đang tải dữ liệu Shipper...</div>
 
-        <div class="result-container" id="output-area"></div>
+        <div class="result-area" id="result-table"></div>
     </div>
 </div>
 
 <script>
-    // THÔNG TIN KẾT NỐI CỦA NÍ
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhoo2vTi11uCBrf1Yj_gr4gJ9pUHZnoByi92fEGFi6GlQQFGIL52SFC2xTQA4ZMYlgMQ/exec";
-    let SHIPPER_DATABASE = {};
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwukwW0tEYoW3j9RTKnkRXnOdNwkA9Yi6RdpdEBE7IjAbzOtswd-dVP1lGJaRNOXIwA/exec";
+    let SHIPPER_DB = {};
 
-    // 1. Xử lý sau khi người dùng chọn tài khoản Google
     function handleCredentialResponse(response) {
         const payload = JSON.parse(atob(response.credential.split('.')[1]));
-        const email = payload.email;
-
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('tool-section').style.display = 'block';
+        document.getElementById('user-email').innerText = payload.email;
 
-        // Gọi về Google Sheet để kiểm tra Email/Hạn dùng
-        fetch(`${SCRIPT_URL}?action=checkAuth&email=${email}`)
+        fetch(`${SCRIPT_URL}?action=checkAuth&email=${payload.email}`)
             .then(res => res.json())
             .then(data => {
-                if (data.status === "success") {
-                    const expiry = new Date(data.expiry).toLocaleDateString('vi-VN');
-                    document.getElementById('user-info').innerText = `👤 ${email} | Hạn dùng: ${expiry}`;
-                    syncShipperData(); // Tải danh mục shipper về máy
-                } else {
-                    alert("Tài khoản của ní đã hết hạn! Vui lòng liên hệ Admin để gia hạn.");
-                    location.reload();
-                }
-            })
-            .catch(err => alert("Lỗi kết nối Server: " + err));
-    }
-
-    // 2. Lấy danh sách TRANG1 từ Google Sheet
-    function syncShipperData() {
-        document.getElementById('loading-text').style.display = 'block';
-        fetch(`${SCRIPT_URL}?action=getDanhMuc`)
-            .then(res => res.json())
-            .then(data => {
-                SHIPPER_DATABASE = data;
-                document.getElementById('loading-text').style.display = 'none';
-                console.log("Database synced!");
+                document.getElementById('user-expiry').innerText = `Hạn: ${new Date(data.expiry).toLocaleDateString('vi-VN')}`;
+                syncData();
             });
     }
 
-    // 3. Xử lý chuỗi mã vận đơn người dùng dán vào
-    function processData() {
-        const rawText = document.getElementById('input-data').value;
-        if (!rawText.trim()) {
-            alert("Ní chưa dán mã đơn mà!");
-            return;
-        }
+    function syncData() {
+        document.getElementById('sync-msg').style.display = 'block';
+        fetch(`${SCRIPT_URL}?action=getDanhMuc`)
+            .then(res => res.json())
+            .then(data => {
+                SHIPPER_DB = data;
+                document.getElementById('sync-msg').innerText = "✅ Đã sẵn sàng xử lý file!";
+            });
+    }
 
-        // Tách các mã đơn (lọc theo xuống dòng, dấu phẩy hoặc khoảng trắng)
-        const codes = rawText.split(/[\n, ]+/).filter(c => c.trim().length > 5);
+    function handleFile(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        document.getElementById('file-name').innerText = "📄 Đang đọc file: " + file.name;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {type: 'array'});
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
+            
+            processExcelData(jsonData);
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    function processExcelData(data) {
+        let html = `<table><thead><tr><th>Mã Đơn</th><th>Khu Vực</th><th>Shipper</th></tr></thead><tbody>`;
         
-        if (Object.keys(SHIPPER_DATABASE).length === 0) {
-            alert("Dữ liệu đang tải, ní đợi xíu rồi bấm lại nha!");
-            return;
-        }
+        // Duyệt từng dòng trong Excel (Bỏ qua tiêu đề dòng 1)
+        data.slice(1).forEach(row => {
+            // JMS thường để mã vận đơn ở cột 0 hoặc 1. Tui sẽ quét tìm ô nào có độ dài > 10 ký tự
+            let billCode = row.find(cell => cell && cell.toString().length >= 10);
+            
+            if (billCode) {
+                let codeStr = billCode.toString().trim();
+                let d3 = codeStr.slice(-3);
+                let info = SHIPPER_DB[d3] || { khu: "Mã lạ", ten: "Chưa phân" };
 
-        let html = `<table>
-            <thead>
-                <tr>
-                    <th>Mã Đơn (6 số cuối)</th>
-                    <th>Khu Vực</th>
-                    <th>Shipper</th>
-                </tr>
-            </thead>
-            <tbody>`;
-
-        codes.forEach(code => {
-            const cleanCode = code.trim();
-            const d3 = cleanCode.slice(-3); // Lấy mã đoạn 3 từ 3 số cuối
-            const info = SHIPPER_DATABASE[d3] || { khu: "⚠️ Mã lạ", ten: "Chưa phân" };
-
-            html += `<tr>
-                <td class="code-tag">...${cleanCode.slice(-6)}</td>
-                <td>${info.khu}</td>
-                <td class="shipper-tag">${info.ten}</td>
-            </tr>`;
+                html += `<tr class="item-row">
+                    <td class="code-text">...${codeStr.slice(-6)}</td>
+                    <td style="color:#636e72">${info.khu}</td>
+                    <td class="shipper-text">${info.ten}</td>
+                </tr>`;
+            }
         });
 
         html += `</tbody></table>`;
-        document.getElementById('output-area').innerHTML = html;
-        
-        // Cuộn xuống kết quả cho vợ ní dễ nhìn
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        document.getElementById('result-table').innerHTML = html;
     }
 </script>
 
